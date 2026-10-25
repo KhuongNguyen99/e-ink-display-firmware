@@ -1,7 +1,7 @@
 #pragma once
 #include "protocol.h"
 
-namespace countwell {
+namespace inventory_counter {
 struct QrBounds {
   uint16_t x, y, size;
 };
@@ -15,4 +15,4 @@ inline bool sameQrBounds(const QrBounds &a, const QrBounds &b) {
   return a.x == b.x && a.y == b.y && a.size == b.size;
 }
 
-}  // namespace countwell
+}  // namespace inventory_counter

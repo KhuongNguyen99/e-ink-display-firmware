@@ -2,18 +2,18 @@ param(
     [Parameter(Mandatory=$true)][ValidateSet('ssd1680', 'jd79661')][string]$Panel,
     [string]$CacheRoot = 'C:\cwesp32',
     [string]$Cli = "$env:LOCALAPPDATA\Programs\Arduino IDE\resources\app\lib\backend\resources\arduino-cli.exe",
-    [string]$ProvisioningPublicKey = $env:COUNTWELL_PROVISIONING_PUBLIC_KEY,
+    [string]$ProvisioningPublicKey = $env:INVENTORY_COUNTER_PROVISIONING_PUBLIC_KEY,
     [ValidateRange(30,900)][int]$BuildTimeoutSeconds = 600,
     [switch]$Bootstrap
 )
 $ErrorActionPreference = 'Stop'
 if ($ProvisioningPublicKey -cnotmatch '^04[0-9a-f]{128}$') {
-    throw 'Supply -ProvisioningPublicKey with the persistent Countwell authority public key (130 lowercase hex characters). Never use a test key.'
+    throw 'Supply -ProvisioningPublicKey with the persistent Inventory Counter authority public key (130 lowercase hex characters). Never use a test key.'
 }
 if (-not (Test-Path -LiteralPath $Cli)) { throw "Arduino CLI not found: $Cli" }
 $CacheRoot = [IO.Path]::GetFullPath($CacheRoot)
 if ($CacheRoot -eq [IO.Path]::GetFullPath("$env:LOCALAPPDATA\Arduino15")) {
-    throw 'Use a separate Countwell cache, not the Arduino IDE package directory.'
+    throw 'Use a separate Inventory Counter cache, not the Arduino IDE package directory.'
 }
 New-Item -ItemType Directory -Path $CacheRoot -Force | Out-Null
 $configPath = Join-Path $CacheRoot 'arduino-cli.yaml'
@@ -41,9 +41,9 @@ if ($installed.Count -ne 1 -or $installed[0] -ne '2.0.10') {
 }
 $buildPath = Join-Path $CacheRoot $Panel
 $sourceParent = Join-Path $CacheRoot ('source-' + $Panel)
-$sourcePath = Join-Path $sourceParent 'countwell_label'
+$sourcePath = Join-Path $sourceParent 'inventory_counter_label'
 New-Item -ItemType Directory -Path $sourcePath -Force | Out-Null
-Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'countwell_label') -File | ForEach-Object {
+Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'inventory_counter_label') -File | ForEach-Object {
     Copy-Item -LiteralPath $_.FullName -Destination $sourcePath -Force
 }
 @"
@@ -51,7 +51,7 @@ Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'countwell_label') -File | F
 // Public trust anchor exported from this installation's persistent authority.
 constexpr char kProvisioningAuthorityPublicKey[] = "$ProvisioningPublicKey";
 "@ | Set-Content -LiteralPath (Join-Path $sourcePath 'provisioning_authority.h') -Encoding ascii
-$profileFlag = '-DCOUNTWELL_' + $Panel.ToUpperInvariant()
+$profileFlag = '-DINVENTORY_COUNTER_' + $Panel.ToUpperInvariant()
 $compileArguments = @('compile', '--config-file', "`"$configPath`"", '--fqbn',
     'esp32:esp32:esp32s3:FlashSize=8M,PartitionScheme=default_8MB,PSRAM=opi,CDCOnBoot=default',
     '--build-property', "`"compiler.cpp.extra_flags=$profileFlag`"", '--build-path', "`"$buildPath`"", "`"$sourcePath`"")

@@ -10,7 +10,7 @@
 #include <mbedtls/sha256.h>
 #include <mbedtls/version.h>
 
-namespace countwell {
+namespace inventory_counter {
 // These operations run only on loopTask. Bluetooth callbacks expose cached public
 // values and enqueue commands; they never perform elliptic-curve operations.
 inline void encodeHex(const uint8_t *value, size_t size, char *out) {
@@ -155,4 +155,4 @@ class ProvisionCrypto {
     mbedtls_mpi_free(&r); mbedtls_mpi_free(&s); return ok;
   }
 };
-}  // namespace countwell
+}  // namespace inventory_counter

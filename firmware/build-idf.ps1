@@ -1,11 +1,11 @@
 param(
     [Parameter(Mandatory=$true)][ValidateSet('ssd1680', 'jd79661')][string]$Panel,
     [string]$CacheRoot = 'C:\cwesp32-idf',
-    [string]$ProvisioningPublicKey = $env:COUNTWELL_PROVISIONING_PUBLIC_KEY
+    [string]$ProvisioningPublicKey = $env:INVENTORY_COUNTER_PROVISIONING_PUBLIC_KEY
 )
 $ErrorActionPreference = 'Stop'
 if ($ProvisioningPublicKey -cnotmatch '^04[0-9a-f]{128}$') {
-    throw 'Supply the persistent Countwell authority public key (130 lowercase hex characters). Never use a test key.'
+    throw 'Supply the persistent Inventory Counter authority public key (130 lowercase hex characters). Never use a test key.'
 }
 $CacheRoot = [IO.Path]::GetFullPath($CacheRoot)
 if ($CacheRoot -eq 'C:\cwesp32' -or $CacheRoot.StartsWith('C:\cwesp32\', [StringComparison]::OrdinalIgnoreCase)) {
@@ -47,7 +47,7 @@ if (Test-Path -LiteralPath $main) {
         ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force }
 }
 Copy-Item -Path (Join-Path $PSScriptRoot 'idf\*') -Destination $stage -Recurse -Force
-Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'countwell_label') -File |
+Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'inventory_counter_label') -File |
     Where-Object { $_.Extension -in '.h', '.c', '.cpp' } |
     Copy-Item -Destination $main -Force
 @"
@@ -64,7 +64,7 @@ $hash = [Security.Cryptography.SHA256]::Create()
 try {
     $cacheId = -join ($hash.ComputeHash([Text.Encoding]::UTF8.GetBytes($CacheRoot.ToLowerInvariant()))[0..5] | ForEach-Object { $_.ToString('x2') })
 } finally { $hash.Dispose() }
-$volume = 'countwell-idf445-' + $cacheId + '-' + $Panel
+$volume = 'inventory-counter-idf445-' + $cacheId + '-' + $Panel
 $log = Join-Path $CacheRoot ($Panel + '-idf-build.log')
 $arguments = @('run', '--rm', '--mount', "type=bind,source=$stage,target=/project",
     '--mount', "type=bind,source=$component,target=/arduino,readonly",

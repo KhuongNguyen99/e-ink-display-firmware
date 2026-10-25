@@ -1,7 +1,7 @@
 #pragma once
 #include "ble_protocol.h"
 
-namespace countwell {
+namespace inventory_counter {
 // All commands have scalar fields. Reject nesting before cJSON's recursive
 // parser sees radio/USB input; a bounded byte count alone does not bound stack.
 inline bool flatCommandJson(const char *text) {
@@ -56,4 +56,4 @@ struct UsbCommand {
     return Result::More;
   }
 };
-}  // namespace countwell
+}  // namespace inventory_counter

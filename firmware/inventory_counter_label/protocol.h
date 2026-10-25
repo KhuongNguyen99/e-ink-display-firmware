@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 
-namespace countwell {
+namespace inventory_counter {
 constexpr size_t kFrameBytes = 4000;
 constexpr unsigned kWidth = 250, kHeight = 122;
 constexpr uint32_t kMaxRevision = 2147483647;
@@ -77,4 +77,4 @@ inline RevisionDecision revisionDecision(bool hasFrame, uint32_t current,
   if (next == current && constantEqual(currentHash, nextHash)) return RevisionDecision::Duplicate;
   return RevisionDecision::Conflict;
 }
-}  // namespace countwell
+}  // namespace inventory_counter

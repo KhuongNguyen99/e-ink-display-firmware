@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 
-namespace countwell {
+namespace inventory_counter {
 constexpr char kDefaultBleName[] = "E-ink display";
 constexpr size_t kMaxBleNameBytes = 248;
 constexpr size_t kScanNameBytes = 29;
@@ -50,4 +50,4 @@ inline size_t scanResponseName(const char *value, uint8_t *data) {
   memcpy(data + 2, value, used);
   return used + 2;
 }
-}  // namespace countwell
+}  // namespace inventory_counter

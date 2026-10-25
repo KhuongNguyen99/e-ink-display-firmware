@@ -4,7 +4,7 @@
 #include <cJSON.h>
 #include "automatic_pm.h"
 
-namespace countwell_power {
+namespace inventory_counter_power {
 struct ControllerPowerState {
   esp_err_t init_result = ESP_ERR_INVALID_STATE;
   esp_err_t enable_result = ESP_ERR_INVALID_STATE;
@@ -19,7 +19,7 @@ inline ControllerPowerState &controllerPowerState() {
 }
 
 inline bool beginPowerSavingBleController() {
-  auto &state = countwell_power::controllerPowerState();
+  auto &state = inventory_counter_power::controllerPowerState();
   if (esp_bt_controller_get_status() != ESP_BT_CONTROLLER_STATUS_IDLE) return state.enabled;
   esp_bt_controller_config_t config = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
   // These are documented runtime configuration fields; keep the pinned SDK intact.
@@ -39,15 +39,15 @@ inline bool beginPowerSavingBleController() {
 }
 
 inline void addPowerRuntimeDiagnostics(cJSON *output) {
-  const auto &state = countwell_power::controllerPowerState();
-  const auto &pm = countwell_power::automaticPmState();
+  const auto &state = inventory_counter_power::controllerPowerState();
+  const auto &pm = inventory_counter_power::automaticPmState();
   cJSON_AddNumberToObject(output, "cpu_mhz", getCpuFrequencyMhz());
   cJSON_AddBoolToObject(output, "modem_sleep", state.enabled);
   cJSON_AddStringToObject(output, "sleep_clock", state.enabled ? "main_xtal" : "unavailable");
   cJSON_AddNumberToObject(output, "ble_init_result", state.init_result);
   cJSON_AddNumberToObject(output, "ble_enable_result", state.enable_result);
   cJSON_AddNumberToObject(output, "ble_sleep_result", state.sleep_result);
-  cJSON_AddBoolToObject(output, "auto_pm_available", COUNTWELL_AUTOMATIC_PM_COMPILED);
+  cJSON_AddBoolToObject(output, "auto_pm_available", INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED);
   cJSON_AddBoolToObject(output, "auto_light_sleep", pm.auto_light_sleep);
   cJSON_AddBoolToObject(output, "auto_pm_configured", pm.pm_configured);
   cJSON_AddBoolToObject(output, "auto_pm_awake_held", pm.awake_held);

@@ -1,4 +1,4 @@
-#include "../countwell_label/power_policy.h"
+#include "../inventory_counter_label/power_policy.h"
 
 #include <cassert>
 #include <cstdint>

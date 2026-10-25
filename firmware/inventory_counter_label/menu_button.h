@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include "power_policy.h"
 
-namespace countwell {
+namespace inventory_counter {
 constexpr uint32_t kMenuDebounceMs = 50;
 
 // The ISR and awake checks share this state under menuEdgeMux. Events latch so
@@ -39,4 +39,4 @@ struct MenuButton {
     if (down != rawHeld) { rawHeld = down; rawAt = now; }
   }
 };
-}  // namespace countwell
+}  // namespace inventory_counter

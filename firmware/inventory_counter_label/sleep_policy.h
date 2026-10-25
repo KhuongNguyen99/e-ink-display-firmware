@@ -2,7 +2,7 @@
 #include "qr_geometry.h"
 #include "power_policy.h"
 
-namespace countwell {
+namespace inventory_counter {
 constexpr uint32_t kAwakeWindowMs = 120000;
 constexpr uint32_t kWakeReleaseMs = 50;
 
@@ -33,4 +33,4 @@ inline void hideQr(const uint8_t *normal, uint8_t *hidden, const QrBounds &qr) {
     for (unsigned y = qr.y; y < unsigned(qr.y) + qr.size; ++y)
       hidden[16 * (kWidth - 1 - x) + y / 8] &= uint8_t(~(0x80 >> (y % 8)));
 }
-}  // namespace countwell
+}  // namespace inventory_counter

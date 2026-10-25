@@ -1,4 +1,4 @@
-#include "../countwell_label/main.cpp"
+#include "../inventory_counter_label/main.cpp"
 #include <assert.h>
 #include <iostream>
 

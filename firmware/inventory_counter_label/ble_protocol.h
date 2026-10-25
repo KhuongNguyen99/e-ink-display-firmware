@@ -1,7 +1,7 @@
 #pragma once
 #include "protocol.h"
 
-namespace countwell {
+namespace inventory_counter {
 constexpr size_t kControlBytes = 1024;
 constexpr size_t kBlePacketBytes = 20;
 
@@ -42,4 +42,4 @@ inline bool appendBleFrame(uint8_t *destination, size_t &used,
   if (offset != used) return false;
   return append(destination, kFrameBytes, used, packet + 2, length - 2);
 }
-}  // namespace countwell
+}  // namespace inventory_counter

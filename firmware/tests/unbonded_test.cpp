@@ -1,4 +1,4 @@
-#include "../countwell_label/main.cpp"
+#include "../inventory_counter_label/main.cpp"
 #include <assert.h>
 #include <iostream>
 
@@ -313,7 +313,7 @@ int main() {
   // power, and leaves the CPU at its idle clock after display work is done.
   connected = pairingOpen = radioRecoveryPending = false;
   testControllerStatus = ESP_BT_CONTROLLER_STATUS_IDLE;
-  countwell_power::controllerPowerState() = countwell_power::ControllerPowerState{};
+  inventory_counter_power::controllerPowerState() = inventory_counter_power::ControllerPowerState{};
   testControllerInitCalls = testControllerEnableCalls = testControllerSleepCalls = 0;
   testTxPower.clear();
   testCpuMHz = 240;

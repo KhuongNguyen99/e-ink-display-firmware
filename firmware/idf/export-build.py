@@ -10,7 +10,7 @@ output.mkdir(exist_ok=True)
 (output / 'sha256.json').unlink(missing_ok=True)
 args = json.loads((build / 'flasher_args.json').read_text())
 files = set(args['flash_files'].values()) | {
-    'flasher_args.json', 'flash_args', 'countwell_label.elf', 'countwell_label.map',
+    'flasher_args.json', 'flash_args', 'inventory_counter_label.elf', 'inventory_counter_label.map',
 }
 manifest = {}
 for name in sorted(files):

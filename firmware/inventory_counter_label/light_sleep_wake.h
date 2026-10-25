@@ -4,7 +4,7 @@
 #include <driver/uart.h>
 #include <esp_sleep.h>
 
-namespace countwell_power {
+namespace inventory_counter_power {
 
 struct LightSleepWakeState {
   gpio_num_t menu_pin = static_cast<gpio_num_t>(-1);
@@ -103,4 +103,4 @@ inline void IRAM_ATTR menuLightSleepInterrupt() {
   }
 }
 
-}  // namespace countwell_power
+}  // namespace inventory_counter_power

@@ -6,10 +6,10 @@ namespace panel {
 constexpr uint8_t kPower = 7, kClock = 12, kMosi = 11, kReset = 10;
 constexpr uint8_t kDc = 13, kCs = 14, kBusy = 9;
 static bool initialized = false;
-#ifdef COUNTWELL_JD79661
+#ifdef INVENTORY_COUNTER_JD79661
 static bool alternateLut = false;
 #endif
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
 constexpr int kBusyLevel = HIGH;
 #else
 constexpr int kBusyLevel = LOW;
@@ -55,7 +55,7 @@ static bool refreshComplete(const char *phase) {
   trace("refresh-complete");
   return true;
 }
-#ifdef COUNTWELL_JD79661
+#ifdef INVENTORY_COUNTER_JD79661
 static void loadFullRefreshLut() {
   const uint8_t waveform[] = {0x00, 0x60, 0x20, 0x10, 0x90};
   for (uint8_t index : {0, 1, 4, 2, 3}) {
@@ -75,7 +75,7 @@ static bool init() {
   pinMode(kBusy, INPUT);
   digitalWrite(kCs, HIGH);
   delay(100); digitalWrite(kReset, HIGH); delay(10); digitalWrite(kReset, LOW);
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
   delay(10); digitalWrite(kReset, HIGH); delay(10);
   if (!ready("ssd-hardware-reset")) return false;
   command(0x12);
@@ -93,9 +93,9 @@ static bool init() {
   reg(0x60, {0x22}); reg(0x82, {0x07}); reg(0xe3, {0x88}); reg(0x41, {0x00});
   reg(0x61, {0x80, 0x00, 0xfa}); reg(0x65, {0x00, 0x00, 0x00}); reg(0x50, {0xb7});
   command(0x10);
-  for (size_t i = 0; i < countwell::kFrameBytes; ++i) data(0xff);
+  for (size_t i = 0; i < inventory_counter::kFrameBytes; ++i) data(0xff);
   command(0x13);
-  for (size_t i = 0; i < countwell::kFrameBytes; ++i) data(0xff);
+  for (size_t i = 0; i < inventory_counter::kFrameBytes; ++i) data(0xff);
   alternateLut = false;
   loadFullRefreshLut();
   reg(0x17, {0xa5});
@@ -106,20 +106,20 @@ static bool init() {
 
 bool render(const uint8_t *frame) {
   if (!initialized && !init()) return false;
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
   if (!ready("ssd-before-frame")) return false;
   reg(0x4e, {0x00}); reg(0x4f, {0x00, 0x00}); reg(0x3c, {0x01}); command(0x24);
-  for (size_t i = 0; i < countwell::kFrameBytes; ++i) data(uint8_t(~frame[i]));
+  for (size_t i = 0; i < inventory_counter::kFrameBytes; ++i) data(uint8_t(~frame[i]));
   // SSD1680 update sequence F7 finishes by disabling analog power and the oscillator.
   reg(0x22, {0xf7}); command(0x20);
 #else
   reg(0x50, {0xd7}); command(0x13);
-  for (size_t i = 0; i < countwell::kFrameBytes; ++i) data(frame[i]);
+  for (size_t i = 0; i < inventory_counter::kFrameBytes; ++i) data(frame[i]);
   loadFullRefreshLut();
   reg(0x17, {0xa5});
 #endif
   if (!refreshComplete("frame-refresh")) return false;
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
   // Deep sleep mode 1 retains RAM and the visible e-paper image. BUSY stays high
   // in this state, so the next render must hardware-reset before waiting on BUSY.
   reg(0x10, {0x01});
@@ -128,7 +128,7 @@ bool render(const uint8_t *frame) {
   return true;
 }
 
-// Small original 5x7 font for setup messages; label typography is rendered by Countwell.
+// Small original 5x7 font for setup messages; label typography is rendered by Inventory Counter.
 static const uint8_t glyphs[][5] = {
   {0x3e,0x51,0x49,0x45,0x3e},{0,0x42,0x7f,0x40,0},{0x62,0x51,0x49,0x49,0x46},
   {0x22,0x41,0x49,0x49,0x36},{0x18,0x14,0x12,0x7f,0x10},{0x27,0x45,0x45,0x45,0x39},
@@ -145,7 +145,7 @@ static const uint8_t glyphs[][5] = {
   {0,0x60,0x60,0,0},{8,8,8,8,8},{0,0x36,0x36,0,0},{0x20,0x10,8,4,2}
 };
 void text(uint8_t *frame, unsigned x, unsigned y, const char *value, unsigned scale) {
-  for (; *value && x + 5 * scale <= countwell::kWidth; ++value, x += 6 * scale) {
+  for (; *value && x + 5 * scale <= inventory_counter::kWidth; ++value, x += 6 * scale) {
     char ch = *value;
     if (ch >= 'a' && ch <= 'z') ch -= 32;
     int index = ch >= '0' && ch <= '9' ? ch - '0' : ch >= 'A' && ch <= 'Z' ? ch - 'A' + 10 :
@@ -156,7 +156,7 @@ void text(uint8_t *frame, unsigned x, unsigned y, const char *value, unsigned sc
         if (glyphs[index][col] & (1 << row))
           for (unsigned dx = 0; dx < scale; ++dx)
             for (unsigned dy = 0; dy < scale; ++dy)
-              countwell::blackPixel(frame, x + col * scale + dx, y + row * scale + dy);
+              inventory_counter::blackPixel(frame, x + col * scale + dx, y + row * scale + dy);
   }
 }
 }

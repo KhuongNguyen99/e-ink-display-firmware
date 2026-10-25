@@ -1,4 +1,4 @@
-#include "../countwell_label/panel.h"
+#include "../inventory_counter_label/panel.h"
 #include <assert.h>
 #include <vector>
 #include <iostream>
@@ -13,7 +13,7 @@ bool waitingForFirstRefresh = true;
 unsigned refreshes = 0;
 unsigned bits = 0;
 uint8_t nextByte = 0, lastCommand = 0;
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
 constexpr int busyLevel = HIGH;
 #else
 constexpr int busyLevel = LOW;
@@ -23,7 +23,7 @@ uint32_t millis() { return elapsed; }
 void delay(uint32_t count) { elapsed += count; }
 int digitalRead(uint8_t pin) {
   assert(pin == 9);
-#ifdef COUNTWELL_JD79661
+#ifdef INVENTORY_COUNTER_JD79661
   // A permitted JD startup state: BUSY stays LOW until the initialization/clear command.
   if (waitingForFirstRefresh) return LOW;
 #endif
@@ -39,7 +39,7 @@ void digitalWrite(uint8_t pin, int value) {
       const bool command = pins[13] == LOW;
       transfers.push_back({command, nextByte});
       if (command) lastCommand = nextByte;
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
       if (command && nextByte == 0x20) busyUntil = elapsed + 500;
 #else
       if (!command && lastCommand == 0x17 && nextByte == 0xa5) {
@@ -50,8 +50,8 @@ void digitalWrite(uint8_t pin, int value) {
   }
 }
 int main() {
-  uint8_t frame[countwell::kFrameBytes] = {};
-  countwell::blackPixel(frame, 0, 0);
+  uint8_t frame[inventory_counter::kFrameBytes] = {};
+  inventory_counter::blackPixel(frame, 0, 0);
   stuckBusy = true;
   uint32_t start = elapsed;
   assert(!panel::render(frame));
@@ -59,7 +59,7 @@ int main() {
   stuckBusy = false; transfers.clear();
   assert(panel::render(frame));
   assert(pins[7] == HIGH);
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
   const uint8_t dataRegister = 0x24;
 #else
   const uint8_t dataRegister = 0x13;
@@ -68,7 +68,7 @@ int main() {
   for (size_t i = 0; i < transfers.size(); ++i) {
     if (!transfers[i].command || (transfers[i].value != 0x10 && transfers[i].value != 0x13)) continue;
     if (planes++ >= 2) break;
-    for (size_t offset = 0; offset < countwell::kFrameBytes; ++offset)
+    for (size_t offset = 0; offset < inventory_counter::kFrameBytes; ++offset)
       assert(!transfers.at(i + 1 + offset).command && transfers.at(i + 1 + offset).value == 0xff);
   }
   assert(planes == 3);
@@ -80,14 +80,14 @@ int main() {
   bool found = false;
   for (size_t i = 0; i < transfers.size(); ++i) {
     if (!transfers[i].command || transfers[i].value != dataRegister) continue;
-#ifdef COUNTWELL_JD79661
+#ifdef INVENTORY_COUNTER_JD79661
     if (transfers.at(i + 1 + 3984).value == 0xff) continue;  // Initial clearing plane, not the label.
 #endif
     found = true;
-    for (size_t offset = 0; offset < countwell::kFrameBytes; ++offset) {
+    for (size_t offset = 0; offset < inventory_counter::kFrameBytes; ++offset) {
       const Transfer &sent = transfers.at(i + 1 + offset);
       assert(!sent.command);
-#ifdef COUNTWELL_SSD1680
+#ifdef INVENTORY_COUNTER_SSD1680
       assert(sent.value == uint8_t(~frame[offset]));
 #else
       assert(sent.value == frame[offset]);

@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <cJSON.h>
 
-namespace countwell {
+namespace inventory_counter {
 // cJSON 1.7.15 prints numbers through sscanf/strtod, which exhausts the
 // Bluetooth callback stack. Internal unsigned integers need only decimal
 // digits; cJSON copies this token and emits it as a JSON number, not a string.
@@ -16,4 +16,4 @@ inline cJSON *addJsonUint32(cJSON *json, const char *name, uint32_t value) {
   } while (value);
   return cJSON_AddRawToObject(json, name, start);
 }
-}  // namespace countwell
+}  // namespace inventory_counter

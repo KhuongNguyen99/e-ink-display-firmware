@@ -4,13 +4,13 @@
 
 #if defined(CONFIG_PM_ENABLE) && CONFIG_PM_ENABLE && \
     defined(CONFIG_FREERTOS_USE_TICKLESS_IDLE) && CONFIG_FREERTOS_USE_TICKLESS_IDLE
-#define COUNTWELL_AUTOMATIC_PM_COMPILED 1
+#define INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED 1
 #include <esp_pm.h>
 #else
-#define COUNTWELL_AUTOMATIC_PM_COMPILED 0
+#define INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED 0
 #endif
 
-namespace countwell_power {
+namespace inventory_counter_power {
 
 struct AutomaticPmState {
   esp_err_t config_result = ESP_ERR_NOT_SUPPORTED;
@@ -22,7 +22,7 @@ struct AutomaticPmState {
   bool pm_configured = false;
   bool auto_light_sleep = false;
   bool awake_held = false;
-#if COUNTWELL_AUTOMATIC_PM_COMPILED
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED
   esp_pm_lock_handle_t cpu_lock = nullptr;
   esp_pm_lock_handle_t awake_lock = nullptr;
 #endif
@@ -36,10 +36,10 @@ inline AutomaticPmState &automaticPmState() {
 inline bool beginAutomaticLightSleep() {
   auto &state = automaticPmState();
   if (state.pm_configured) return state.auto_light_sleep;
-#if COUNTWELL_AUTOMATIC_PM_COMPILED
-  state.lock_result = esp_pm_lock_create(ESP_PM_CPU_FREQ_MAX, 0, "countwell_cpu", &state.cpu_lock);
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED
+  state.lock_result = esp_pm_lock_create(ESP_PM_CPU_FREQ_MAX, 0, "inventory_counter_cpu", &state.cpu_lock);
   if (state.lock_result != ESP_OK) return false;
-  state.lock_result = esp_pm_lock_create(ESP_PM_NO_LIGHT_SLEEP, 0, "countwell_work", &state.awake_lock);
+  state.lock_result = esp_pm_lock_create(ESP_PM_NO_LIGHT_SLEEP, 0, "inventory_counter_work", &state.awake_lock);
   if (state.lock_result != ESP_OK) {
     esp_pm_lock_delete(state.cpu_lock); state.cpu_lock = nullptr;
     return false;
@@ -74,7 +74,7 @@ inline bool beginAutomaticLightSleep() {
 
 inline bool holdAwakeForWork() {
   auto &state = automaticPmState();
-#if COUNTWELL_AUTOMATIC_PM_COMPILED
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED
   if (!state.auto_light_sleep || state.awake_held) return true;
   state.awake_lock_result = esp_pm_lock_acquire(state.awake_lock);
   if (state.awake_lock_result == ESP_OK) {
@@ -93,7 +93,7 @@ inline bool holdAwakeForWork() {
 
 inline bool allowLightSleepWhileWaiting() {
   auto &state = automaticPmState();
-#if COUNTWELL_AUTOMATIC_PM_COMPILED
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED
   if (!state.auto_light_sleep || !state.awake_held) return false;
   state.awake_lock_result = esp_pm_lock_release(state.awake_lock);
   if (state.awake_lock_result == ESP_OK) state.awake_held = false;
@@ -104,7 +104,7 @@ inline bool allowLightSleepWhileWaiting() {
 class ScopedFastCpu {
  public:
   ScopedFastCpu() : previous_mhz_(getCpuFrequencyMhz()) {
-#if COUNTWELL_AUTOMATIC_PM_COMPILED
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED
     auto &state = automaticPmState();
     if (state.pm_configured) {
       state.cpu_lock_result = esp_pm_lock_acquire(state.cpu_lock);
@@ -116,7 +116,7 @@ class ScopedFastCpu {
   }
 
   ~ScopedFastCpu() {
-#if COUNTWELL_AUTOMATIC_PM_COMPILED
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED
     if (locked_) {
       automaticPmState().cpu_lock_result = esp_pm_lock_release(automaticPmState().cpu_lock);
       return;
@@ -131,13 +131,13 @@ class ScopedFastCpu {
  private:
   uint32_t previous_mhz_;
   bool boosted_ = false;
-#if COUNTWELL_AUTOMATIC_PM_COMPILED
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED
   bool locked_ = false;
 #endif
 };
 
 inline esp_err_t dumpPmLocks(FILE *stream = stdout) {
-#if COUNTWELL_AUTOMATIC_PM_COMPILED && defined(CONFIG_PM_PROFILING) && CONFIG_PM_PROFILING
+#if INVENTORY_COUNTER_AUTOMATIC_PM_COMPILED && defined(CONFIG_PM_PROFILING) && CONFIG_PM_PROFILING
   return automaticPmState().pm_configured ? esp_pm_dump_locks(stream) : ESP_ERR_INVALID_STATE;
 #else
   (void)stream;
@@ -145,4 +145,4 @@ inline esp_err_t dumpPmLocks(FILE *stream = stdout) {
 #endif
 }
 
-}  // namespace countwell_power
+}  // namespace inventory_counter_power

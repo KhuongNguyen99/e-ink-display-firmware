@@ -16,7 +16,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-/* Countwell adaptation: the pinned ESP32 core omits MBEDTLS_HKDF_C.
+/* Inventory Counter adaptation: the pinned ESP32 core omits MBEDTLS_HKDF_C.
  * Use the upstream v2.28.0 implementation only when it is absent; host tests
  * force this same implementation. Cryptographic code below is unchanged.
  */
@@ -29,7 +29,7 @@
 #include MBEDTLS_CONFIG_FILE
 #endif
 
-#if !defined(MBEDTLS_HKDF_C) || defined(COUNTWELL_TEST_HKDF_FALLBACK)
+#if !defined(MBEDTLS_HKDF_C) || defined(INVENTORY_COUNTER_TEST_HKDF_FALLBACK)
 
 #include <string.h>
 #include "mbedtls/hkdf.h"

@@ -1,5 +1,5 @@
-#include "../countwell_label/ble_json.h"
-#include "../countwell_label/protocol.h"
+#include "../inventory_counter_label/ble_json.h"
+#include "../inventory_counter_label/protocol.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-using namespace countwell;
+using namespace inventory_counter;
 
 // The pinned cJSON number printer calls sscanf. Any regression to that path
 // fails this test even if the resulting JSON would otherwise look correct.

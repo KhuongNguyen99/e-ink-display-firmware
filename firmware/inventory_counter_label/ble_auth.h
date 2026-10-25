@@ -3,7 +3,7 @@
 #include "qr_geometry.h"
 #include <stdio.h>
 
-namespace countwell {
+namespace inventory_counter {
 constexpr size_t kTranscriptBytes = 384;
 
 inline bool decodeBleKey(const char *text, uint8_t *key) {
@@ -46,4 +46,4 @@ inline bool committedTranscript(char *output, size_t capacity, const char *devic
                  generation, box, profile, static_cast<unsigned long>(revision), digest);
   return length > 0 && size_t(length) < capacity;
 }
-}  // namespace countwell
+}  // namespace inventory_counter

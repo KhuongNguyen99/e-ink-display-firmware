@@ -16,7 +16,7 @@
 #error Arduino 2.0.10 requires the legacy BLE advertising APIs
 #endif
 #if CONFIG_PM_SLP_DISABLE_GPIO
-#error Countwell requires its board GPIO configuration to remain active during light sleep
+#error Inventory Counter requires its board GPIO configuration to remain active during light sleep
 #endif
 #if CONFIG_ESP_SLEEP_GPIO_RESET_WORKAROUND
 #error The GPIO reset workaround must not silently enable GPIO isolation

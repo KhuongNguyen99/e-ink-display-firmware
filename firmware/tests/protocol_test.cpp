@@ -1,13 +1,13 @@
-#include "../countwell_label/ble_protocol.h"
-#include "../countwell_label/ble_auth.h"
-#include "../countwell_label/ble_name.h"
+#include "../inventory_counter_label/ble_protocol.h"
+#include "../inventory_counter_label/ble_auth.h"
+#include "../inventory_counter_label/ble_name.h"
 #include <assert.h>
 #include <algorithm>
 #include <string>
 #include <vector>
 #include <iostream>
 
-using namespace countwell;
+using namespace inventory_counter;
 const char *box = "01234567-89ab-4cde-8123-456789abcdef";
 const char *hash = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
 

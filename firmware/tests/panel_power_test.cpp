@@ -1,10 +1,10 @@
-#include "../countwell_label/panel.h"
+#include "../inventory_counter_label/panel.h"
 #include <assert.h>
 #include <limits.h>
 #include <iostream>
 #include <vector>
 
-#ifndef COUNTWELL_SSD1680
+#ifndef INVENTORY_COUNTER_SSD1680
 #error "This test exercises the SSD1680 panel profile"
 #endif
 
@@ -73,11 +73,11 @@ size_t commandAfter(size_t start, uint8_t value) {
 }
 void checkSuccessfulUpdate(size_t start, const uint8_t *frame) {
   const size_t ram = commandAfter(start, 0x24);
-  for (size_t i = 0; i < countwell::kFrameBytes; ++i) {
+  for (size_t i = 0; i < inventory_counter::kFrameBytes; ++i) {
     const Event &sent = events.at(ram + 1 + i);
     assert(sent.kind == Kind::Data && sent.value == uint8_t(~frame[i]));
   }
-  const size_t control = commandAfter(ram + 1 + countwell::kFrameBytes, 0x22);
+  const size_t control = commandAfter(ram + 1 + inventory_counter::kFrameBytes, 0x22);
   assert(events.at(control + 1).kind == Kind::Data && events.at(control + 1).value == 0xf7);
   const size_t activate = commandAfter(control + 2, 0x20);
   const size_t sleep = commandAfter(activate + 1, 0x10);
@@ -94,10 +94,10 @@ void checkFailedUpdate(size_t start, uint8_t expectedControl) {
 }
 
 int main() {
-  uint8_t first[countwell::kFrameBytes] = {};
-  uint8_t second[countwell::kFrameBytes] = {};
-  countwell::blackPixel(first, 0, 0);
-  countwell::blackPixel(second, 249, 121);
+  uint8_t first[inventory_counter::kFrameBytes] = {};
+  uint8_t second[inventory_counter::kFrameBytes] = {};
+  inventory_counter::blackPixel(first, 0, 0);
+  inventory_counter::blackPixel(second, 249, 121);
 
   size_t start = events.size();
   assert(panel::render(first));

@@ -26,7 +26,7 @@
 #include "sleep_runtime.h"
 #include "menu_button.h"
 
-using namespace countwell;
+using namespace inventory_counter;
 constexpr char kVersion[] = "3.7.0";
 constexpr uint32_t kRecordMagic = 0x43574232;
 constexpr uint32_t kNameMagic = 0x43574e31;
@@ -131,7 +131,7 @@ void wakeLoop() {
   if (powerLoopTaskHandle) xTaskNotifyGive(powerLoopTaskHandle);
 }
 
-using FastCpu = countwell_power::ScopedFastCpu;
+using FastCpu = inventory_counter_power::ScopedFastCpu;
 bool renderPanel(const uint8_t *pixels) {
   FastCpu boost;
   return panel::render(pixels);
@@ -145,7 +145,7 @@ void IRAM_ATTR menuPressInterrupt() {
   portENTER_CRITICAL_ISR(&menuEdgeMux);
   menuButton.sample(millis(), digitalRead(panel::kMenuPin) == LOW);
   portEXIT_CRITICAL_ISR(&menuEdgeMux);
-  countwell_power::menuLightSleepInterrupt();
+  inventory_counter_power::menuLightSleepInterrupt();
 }
 // Called with stateMutex held; QR privacy never disables authenticated BLE work.
 void updateQrVisibility() {
@@ -657,14 +657,14 @@ void processUsbCommand(char *message) {
   if (cJSON_IsObject(json) && op && !strcmp(op, "usb_identity") && cJSON_GetArraySize(json) == 1) {
     Lock lock; payload = identity(); field = "identity";
   } else if (cJSON_IsObject(json) && op && !strcmp(op, "usb_pm") && cJSON_GetArraySize(json) == 1) {
-    const esp_err_t result = countwell_power::dumpPmLocks(stdout);
+    const esp_err_t result = inventory_counter_power::dumpPmLocks(stdout);
     cJSON *report = cJSON_CreateObject();
     cJSON_AddNumberToObject(report, "result", result);
     payload = serialized(report); field = "pm";
   } else if (cJSON_IsObject(json) && op && !strcmp(op, "usb_power") && cJSON_GetArraySize(json) == 1) {
     cJSON *power = cJSON_CreateObject();
     addPowerRuntimeDiagnostics(power);
-    const auto &wake = countwell_power::lightSleepWakeState();
+    const auto &wake = inventory_counter_power::lightSleepWakeState();
     cJSON_AddBoolToObject(power, "light_sleep_observed", lightSleepObserved);
     cJSON_AddNumberToObject(power, "last_observed_light_sleep_wake_cause", lastObservedLightSleepWake);
     cJSON_AddNumberToObject(power, "reset_reason", esp_reset_reason());
@@ -843,16 +843,16 @@ void showSetup() {
   bool open; const char *message;
   {
     Lock lock; open = pairingOpen;
-    message = paired() ? "UPDATE IN COUNTWELL" : "SET UP IN COUNTWELL";
+    message = paired() ? "UPDATE IN INVENTORY COUNTER" : "SET UP IN INVENTORY COUNTER";
     screenIsLabel = false;
     if (hasFrame && !receiving && !busy) state("ready");
   }
   memset(screen, 0, sizeof(screen));
-  panel::text(screen, 5, 5, "COUNTWELL", 2);
+  panel::text(screen, 5, 5, "INVENTORY COUNTER", 2);
   if (open) {
     panel::text(screen, 5, 35, "PHONE SETUP", 2);
     panel::text(screen, 5, 65, "CHOOSE REPLACE DISPLAY");
-    panel::text(screen, 5, 80, "IN COUNTWELL ON YOUR PHONE");
+    panel::text(screen, 5, 80, "IN INVENTORY COUNTER ON YOUR PHONE");
   } else panel::text(screen, 5, 48, message);
   panel::text(screen, 5, 101, "MENU 5S - SETUP 2 MIN");
   panel::text(screen, 5, 113, "BACK - RETURN TO LABEL");
@@ -1022,7 +1022,7 @@ void setup() {
   // Count an already held wake button from boot, including the startup refresh.
   menuDown = digitalRead(panel::kMenuPin) == LOW; menuStarted = millis(); menuLatched = false;
   menuButton.begin(menuStarted, menuDown);
-  if (!countwell_power::beginLightSleepWake(static_cast<gpio_num_t>(panel::kMenuPin),
+  if (!inventory_counter_power::beginLightSleepWake(static_cast<gpio_num_t>(panel::kMenuPin),
         static_cast<gpio_num_t>(panel::kBackPin), powerLoopTaskHandle))
     Serial.println("Automatic light-sleep wake sources unavailable; staying awake");
   attachInterrupt(digitalPinToInterrupt(panel::kMenuPin), menuPressInterrupt, CHANGE);
@@ -1089,10 +1089,10 @@ void setup() {
   awakeWindow.begin(millis());
   fastAdvertisingWindow.begin(millis());
   serviceAdvertising(millis());
-  Serial.printf("Countwell %s BLE; device %s; panel %s; NVS %s; unbonded advertising %s\n", kVersion, deviceId,
+  Serial.printf("Inventory Counter %s BLE; device %s; panel %s; NVS %s; unbonded advertising %s\n", kVersion, deviceId,
                 panel::kProfile, storageReady ? "ready" : "FAILED", advertisingReady ? "ready" : "FAILED");
-  if (!countwell_power::beginAutomaticLightSleep()) {
-    if (countwell_power::automaticPmState().pm_configured)
+  if (!inventory_counter_power::beginAutomaticLightSleep()) {
+    if (inventory_counter_power::automaticPmState().pm_configured)
       Serial.println("Automatic light sleep could not be verified; retaining the awake safety lock");
     else {
       Serial.println("Automatic light sleep unavailable; using 80 MHz idle clock");
@@ -1128,7 +1128,7 @@ void serviceQrVisibility(uint32_t now) {
   }
 }
 void loop() {
-  if (!countwell_power::holdAwakeForWork()) abort();
+  if (!inventory_counter_power::holdAwakeForWork()) abort();
   bool menuHold = false;
   {
     Lock lock;
@@ -1220,10 +1220,10 @@ void loop() {
     portEXIT_CRITICAL(&menuEdgeMux);
   }
   const bool wakeArmed = !usbWaiting && buttonStable && !wait.pairingOpen &&
-      countwell_power::automaticPmState().auto_light_sleep && countwell_power::armLightSleepWake();
-  if (wakeArmed) countwell_power::allowLightSleepWhileWaiting();
+      inventory_counter_power::automaticPmState().auto_light_sleep && inventory_counter_power::armLightSleepWake();
+  if (wakeArmed) inventory_counter_power::allowLightSleepWhileWaiting();
   ulTaskNotifyTake(pdTRUE, ticks ? ticks : 1);
-  if (!countwell_power::holdAwakeForWork()) abort();
+  if (!inventory_counter_power::holdAwakeForWork()) abort();
   // IDF exposes a wake cause only after successful sleep. Latch evidence,
   // not a cycle count: the cause can persist across multiple loop iterations.
   const esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
@@ -1231,7 +1231,7 @@ void loop() {
     lightSleepObserved = true; lastObservedLightSleepWake = cause;
   }
   if (wakeArmed) {
-    countwell_power::restoreLightSleepWake();
+    inventory_counter_power::restoreLightSleepWake();
     Lock lock; updateQrVisibility();
   }
 }

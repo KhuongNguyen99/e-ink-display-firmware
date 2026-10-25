@@ -1,8 +1,8 @@
-#include "../countwell_label/light_sleep_wake.h"
+#include "../inventory_counter_label/light_sleep_wake.h"
 #include <cassert>
 #include <iostream>
 
-using namespace countwell_power;
+using namespace inventory_counter_power;
 
 static void resetWake() {
   lightSleepWakeState() = LightSleepWakeState{};

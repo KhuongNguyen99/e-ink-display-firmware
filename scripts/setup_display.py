@@ -1,4 +1,4 @@
-"""Link a USB-connected display to a Countwell box without phone pairing."""
+"""Link a USB-connected display to a Inventory Counter box without phone pairing."""
 
 import argparse
 import json
@@ -25,12 +25,12 @@ def request_api(server, path, payload=None):
         with urllib.request.urlopen(request, timeout=20) as response:
             raw = response.read(1_048_577)
         if len(raw) > 1_048_576:
-            raise SetupError("Countwell returned an oversized response.")
+            raise SetupError("Inventory Counter returned an oversized response.")
         return json.loads(raw)
     except urllib.error.HTTPError as exc:
-        raise SetupError(f"Countwell rejected setup (HTTP {exc.code}). Check the box and try again.") from None
+        raise SetupError(f"Inventory Counter rejected setup (HTTP {exc.code}). Check the box and try again.") from None
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
-        raise SetupError("Could not reach Countwell. Check its address and try again.") from None
+        raise SetupError("Could not reach Inventory Counter. Check its address and try again.") from None
 
 
 def request_usb(port, payload, timeout=8):
@@ -70,7 +70,7 @@ def request_usb(port, payload, timeout=8):
             if not isinstance(response, dict) or response.get("ok") is not True:
                 raise SetupError("The display rejected setup. Hold Menu for five seconds and try again.")
             return response
-    raise SetupError("No USB reply. Check the port and install Countwell firmware 3 or later.")
+    raise SetupError("No USB reply. Check the port and install Inventory Counter firmware 3 or later.")
 
 
 def link_display(port, box_identifier, api):
@@ -78,7 +78,7 @@ def link_display(port, box_identifier, api):
     identity = request_usb(port, {"op": "usb_identity"}).get("identity")
     if (not isinstance(identity, dict) or identity.get("protocol") != 2 or
             identity.get("phone_pairing") is not False or identity.get("provisioning") != "usb"):
-        raise SetupError("Update the display to Countwell firmware 3 before USB setup.")
+        raise SetupError("Update the display to Inventory Counter firmware 3 before USB setup.")
     if identity.get("paired") and identity.get("box_id") != box.get("id"):
         raise SetupError("This display is linked to a different box.")
     display = box.get("display") or {}
@@ -93,7 +93,7 @@ def link_display(port, box_identifier, api):
             not isinstance(command.get("key"), str) or not re.fullmatch("[0-9a-f]{64}", command["key"]) or
             not isinstance(command.get("generation"), str) or
             not re.fullmatch("[0-9a-f]{16}", command["generation"])):
-        raise SetupError("Countwell could not prepare USB setup.")
+        raise SetupError("Inventory Counter could not prepare USB setup.")
     reply = request_usb(port, {**command, "op": "usb_pair"})
     receipt = reply.get("receipt")
     if (not isinstance(receipt, dict) or receipt.get("state") != "paired" or
@@ -107,14 +107,14 @@ def link_display(port, box_identifier, api):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", required=True, help="USB port, for example COM3 or /dev/ttyUSB0")
-    parser.add_argument("--box", required=True, help="Box code or box ID from Countwell")
-    parser.add_argument("--server", default="http://127.0.0.1:8082", help="Countwell API or HTTPS app address")
+    parser.add_argument("--box", required=True, help="Box code or box ID from Inventory Counter")
+    parser.add_argument("--server", default="http://127.0.0.1:8082", help="Inventory Counter API or HTTPS app address")
     args = parser.parse_args()
     server = args.server.rstrip("/")
     url = urllib.parse.urlsplit(server)
     if (url.scheme not in ("http", "https") or not url.hostname or url.username or
             url.password or url.query or url.fragment or url.path not in ("", "/")):
-        parser.error("Use the Countwell address without a path, password or query.")
+        parser.error("Use the Inventory Counter address without a path, password or query.")
     try:
         import serial
     except ImportError:

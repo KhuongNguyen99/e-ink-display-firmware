@@ -2,7 +2,7 @@
 #include "qr_geometry.h"
 #include <stdio.h>
 
-namespace countwell {
+namespace inventory_counter {
 constexpr uint32_t kFindDurationMs = 30000;
 constexpr uint32_t kFindRestoreRetryMs = 1000;
 constexpr unsigned kFindQrHalo = 12;
@@ -36,4 +36,4 @@ inline bool findTranscript(char *output, size_t capacity, const char *device,
       digest, challenge, unsigned(qr.x), unsigned(qr.y), unsigned(qr.size));
   return length > 0 && size_t(length) < capacity;
 }
-}  // namespace countwell
+}  // namespace inventory_counter

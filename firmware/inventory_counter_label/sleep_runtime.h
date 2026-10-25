@@ -6,7 +6,7 @@
 #include <driver/gpio.h>
 #include <driver/rtc_io.h>
 
-namespace countwell {
+namespace inventory_counter {
 // GPIO7 drives the Q9 panel-ground switch; VCI/VDDIO remain at 3V3. Retain HIGH
 // and idle panel signals so opening ground cannot backpower through live IO.
 constexpr gpio_num_t kPanelSleepPins[] = {GPIO_NUM_7, GPIO_NUM_10, GPIO_NUM_11,
@@ -49,4 +49,4 @@ inline bool enterButtonSleep() {
   esp_deep_sleep_start();
   return true;  // Only reached by the host-test deep-sleep stub.
 }
-}  // namespace countwell
+}  // namespace inventory_counter

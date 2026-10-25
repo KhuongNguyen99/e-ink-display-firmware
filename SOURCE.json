@@ -15,7 +15,7 @@
     {
       "path": "firmware/NOTICE.md",
       "source_sha256": "ae58bbdbf03e3d6a2def173a0d1be35432572631cec34033f64522ec6b67300a",
-      "repository_sha256": "ae58bbdbf03e3d6a2def173a0d1be35432572631cec34033f64522ec6b67300a"
+      "repository_sha256": "b32895e756ea38dc04bcf2bbe49234999f31af7a698e693e79e7cb2b9fb8a250"
     },
     {
       "path": "firmware/PROVISIONING.md",
@@ -25,152 +25,152 @@
     {
       "path": "firmware/README.md",
       "source_sha256": "e756f2896ef184722fd539b30bb9eaad1d3f76eee7311c7e21e54da6389fedcd",
-      "repository_sha256": "6666e9a34b5f20571268ac5a6216df5f1d32da62dfeb378e61de4ba38b8812f1"
+      "repository_sha256": "2099d145cdd7247b6c2d0b2e7c112408c53b2ab11dbcef8f29d92f8aa8031f88"
     },
     {
       "path": "firmware/build-idf.ps1",
       "source_sha256": "bc17508e0f9a931e462b986d2b8ac6332de63c342638eeac6342ba47a999c122",
-      "repository_sha256": "bc17508e0f9a931e462b986d2b8ac6332de63c342638eeac6342ba47a999c122"
+      "repository_sha256": "50316eca0c21a8be6bcb4a1431d381b42e534a56a3ec4afd182cb7e37d4e08f7"
     },
     {
       "path": "firmware/build.ps1",
       "source_sha256": "e7769691d51885cacd4f878833cf61c1f9db0f59426a36b8ca50b532549f76bd",
-      "repository_sha256": "e7769691d51885cacd4f878833cf61c1f9db0f59426a36b8ca50b532549f76bd"
+      "repository_sha256": "013d69df0b8820d900a7b357bfddb738a192cf13efe6bf575df57b169b668445"
     },
     {
-      "path": "firmware/countwell_label/automatic_pm.h",
+      "path": "firmware/inventory_counter_label/automatic_pm.h",
       "source_sha256": "e3733f01389e4ebf9b2d35b052c8830a383d9d561be4f48a54077fe6dd21cb12",
-      "repository_sha256": "e3733f01389e4ebf9b2d35b052c8830a383d9d561be4f48a54077fe6dd21cb12"
+      "repository_sha256": "e06a7e810fe1672f6ea56d6e52d3840c5203119c2a90886c4aba75b38ff115a2"
     },
     {
-      "path": "firmware/countwell_label/ble_auth.h",
+      "path": "firmware/inventory_counter_label/ble_auth.h",
       "source_sha256": "da0fb3069de7e432b08f799c28aeb0d2f38049469cb733cbc0bc8961ab4d1a91",
-      "repository_sha256": "da0fb3069de7e432b08f799c28aeb0d2f38049469cb733cbc0bc8961ab4d1a91"
+      "repository_sha256": "9ca6ec7cf05598f1143909b1f24cf4f3f13013baa4172c16ab83e426bad24fce"
     },
     {
-      "path": "firmware/countwell_label/ble_connection.h",
+      "path": "firmware/inventory_counter_label/ble_connection.h",
       "source_sha256": "77d1403f2904bf83b722d9497f6ee8fe119b45e985beba524a8af29783d8eddd",
-      "repository_sha256": "77d1403f2904bf83b722d9497f6ee8fe119b45e985beba524a8af29783d8eddd"
+      "repository_sha256": "527cccb18f7f471baf7ada945fdfba49446889c9add3abe1e626bf80510d8548"
     },
     {
-      "path": "firmware/countwell_label/ble_json.h",
+      "path": "firmware/inventory_counter_label/ble_json.h",
       "source_sha256": "05ea37eefbfbaced7898af7637d8c172a6b62a37ac26607cec0808f0ec07e12a",
-      "repository_sha256": "05ea37eefbfbaced7898af7637d8c172a6b62a37ac26607cec0808f0ec07e12a"
+      "repository_sha256": "18b9db535495231c23c8e2931b67056deb58b0af8c1135a903a9bb802bb37a4f"
     },
     {
-      "path": "firmware/countwell_label/ble_name.h",
+      "path": "firmware/inventory_counter_label/ble_name.h",
       "source_sha256": "0bae2c4d4153d670cb513b71ce48ab1ed73d76eb7f98bcaf8d0c9dc14d106084",
-      "repository_sha256": "0bae2c4d4153d670cb513b71ce48ab1ed73d76eb7f98bcaf8d0c9dc14d106084"
+      "repository_sha256": "dd174e759145d8ab7351dd30d28d0d8dc6999f02be64d7f809249672fbcd54d2"
     },
     {
-      "path": "firmware/countwell_label/ble_protocol.h",
+      "path": "firmware/inventory_counter_label/ble_protocol.h",
       "source_sha256": "e15ac1b8bb99e44717c851bb0aef01a4aa2b7df447aef4f1727e1d5a33e1895b",
-      "repository_sha256": "e15ac1b8bb99e44717c851bb0aef01a4aa2b7df447aef4f1727e1d5a33e1895b"
+      "repository_sha256": "6e042f03ff530b370f93c859ad819548d74e5abe623a941693a621474b3b2955"
     },
     {
-      "path": "firmware/countwell_label/countwell_label.ino",
+      "path": "firmware/inventory_counter_label/inventory_counter_label.ino",
       "source_sha256": "277c14975e6d8527163dd41a3aff2ab93e50d52caf8df1a9cde975644a49cc7c",
       "repository_sha256": "c30ee07196472d893e009765796976807368762bf4f1d5cd81dc566e546841e3"
     },
     {
-      "path": "firmware/countwell_label/find_tag.h",
+      "path": "firmware/inventory_counter_label/find_tag.h",
       "source_sha256": "b931a9d29542cef31f64d2e00c3765878da879b2b5efda5a24e253f7130fe4d8",
-      "repository_sha256": "48ccb1617e69a9f4e8881ff749dd852704ace55640ef8ed5ed664ff3a84f2dca"
+      "repository_sha256": "69b590d9ea962d0ef76a2276af9f482d8edeb90e29a5e144df67276c15487548"
     },
     {
-      "path": "firmware/countwell_label/hkdf_fallback.c",
+      "path": "firmware/inventory_counter_label/hkdf_fallback.c",
       "source_sha256": "dd20213d9abf460c6662d3ba0ed3ae82e5956abd7d2d0715e27bc9ef5b73866a",
-      "repository_sha256": "de665cccb02d56767c476f966ccdca404df1fe16c523a862e878d8923337d142"
+      "repository_sha256": "f60d849aa20a56cef83962ea04bfb3ac035c98f805753bbe0df1a5e3672b2669"
     },
     {
-      "path": "firmware/countwell_label/light_sleep_wake.h",
+      "path": "firmware/inventory_counter_label/light_sleep_wake.h",
       "source_sha256": "ca8ada731c83675df07cfd41f854f0d64b7f91300c0416c0704e003d2b3c3c65",
-      "repository_sha256": "ca8ada731c83675df07cfd41f854f0d64b7f91300c0416c0704e003d2b3c3c65"
+      "repository_sha256": "71b1246eff45aacb0573f8070aad90b16371c02b9f230aa1925f45451b67d180"
     },
     {
-      "path": "firmware/countwell_label/main.cpp",
+      "path": "firmware/inventory_counter_label/main.cpp",
       "source_sha256": "730578a27e1aaa1f6a8e845f0dc0547d8059735729a106e5e82ee73e0405f302",
-      "repository_sha256": "c5da6a6163f3eb64344a574f334088ff551a7282d66338378c864dcb29d93bb5"
+      "repository_sha256": "bfd316e9b94057026b71836aad19031c690010dc767fb16f1984a7f4403cd0a1"
     },
     {
-      "path": "firmware/countwell_label/menu_button.h",
+      "path": "firmware/inventory_counter_label/menu_button.h",
       "source_sha256": "cfee029602a1d9d035520cd81f540a60ff0f0f0add6ae68d92c3ac4d605a7dec",
-      "repository_sha256": "cfee029602a1d9d035520cd81f540a60ff0f0f0add6ae68d92c3ac4d605a7dec"
+      "repository_sha256": "21e9503f5ccf6a79dcf37fae8411d77fa7737d6fb7f79b496662d1ccd6b40022"
     },
     {
-      "path": "firmware/countwell_label/panel.cpp",
+      "path": "firmware/inventory_counter_label/panel.cpp",
       "source_sha256": "e83a948c3e6919c5771a7bbdf59bfe95cae96d91e7807697e5ecbff84d85b4d0",
-      "repository_sha256": "e83a948c3e6919c5771a7bbdf59bfe95cae96d91e7807697e5ecbff84d85b4d0"
+      "repository_sha256": "58c7fb8530561f1831a054686050d049fe97be03d8d2c065f908ab049560865f"
     },
     {
-      "path": "firmware/countwell_label/panel.h",
+      "path": "firmware/inventory_counter_label/panel.h",
       "source_sha256": "aa47c7a062f3f9958967b30079287bf009a40fcd8bdb1417c64bf1ba0eae8a70",
-      "repository_sha256": "aa47c7a062f3f9958967b30079287bf009a40fcd8bdb1417c64bf1ba0eae8a70"
+      "repository_sha256": "3c4c85b1b314d4298bbebb96aba38a6cc7ac367b9d2584331edff3e2dd0383fd"
     },
     {
-      "path": "firmware/countwell_label/power_policy.h",
+      "path": "firmware/inventory_counter_label/power_policy.h",
       "source_sha256": "ea4167feaf80445219a87e360d8d809757594e14d2fc47635af1e6aa613f0644",
       "repository_sha256": "ea4167feaf80445219a87e360d8d809757594e14d2fc47635af1e6aa613f0644"
     },
     {
-      "path": "firmware/countwell_label/power_runtime.h",
+      "path": "firmware/inventory_counter_label/power_runtime.h",
       "source_sha256": "3c904dc6fdbfa780181324667358b78423384feb69d0fa5af3dcf1abd441825b",
-      "repository_sha256": "3c904dc6fdbfa780181324667358b78423384feb69d0fa5af3dcf1abd441825b"
+      "repository_sha256": "05e322a04169cd115133339dde74301d13256f808ab01d85705b835cbd42cb59"
     },
     {
-      "path": "firmware/countwell_label/protocol.h",
+      "path": "firmware/inventory_counter_label/protocol.h",
       "source_sha256": "b2ff758266acbe507dc0ae14e7c6d9433d1c8f4e3b4761634bebf9789b62b2bd",
-      "repository_sha256": "b2ff758266acbe507dc0ae14e7c6d9433d1c8f4e3b4761634bebf9789b62b2bd"
+      "repository_sha256": "0b0fb195ae915a74c35287cf786376ca8653adba7c1dda074f1d26e7809e8898"
     },
     {
-      "path": "firmware/countwell_label/provisioning_authority.h",
+      "path": "firmware/inventory_counter_label/provisioning_authority.h",
       "source_sha256": "acf598370f50d45920e51d777f633cca9f09c4dc4ad66f29770833a3eab67b5a",
       "repository_sha256": "acf598370f50d45920e51d777f633cca9f09c4dc4ad66f29770833a3eab67b5a"
     },
     {
-      "path": "firmware/countwell_label/provisioning_crypto.h",
+      "path": "firmware/inventory_counter_label/provisioning_crypto.h",
       "source_sha256": "cf099820338700d5d7891552beeeb9fe8a965ccabcd5597f0d566de21acb7c32",
-      "repository_sha256": "cf099820338700d5d7891552beeeb9fe8a965ccabcd5597f0d566de21acb7c32"
+      "repository_sha256": "be17e900e0c46cf0e6ef96a4c07c3ca9f6d1ea4c56ca1a0f17a50254b1b2d9a8"
     },
     {
-      "path": "firmware/countwell_label/qr_geometry.h",
+      "path": "firmware/inventory_counter_label/qr_geometry.h",
       "source_sha256": "12484b9aabe9d938d52f7b302023c644d22f206249eabc5d0e68e2b80c1ff0e3",
-      "repository_sha256": "12484b9aabe9d938d52f7b302023c644d22f206249eabc5d0e68e2b80c1ff0e3"
+      "repository_sha256": "4c70a236307357b33e014725f498412014e5f8a89c13c91ea6d2d5efcccab689"
     },
     {
-      "path": "firmware/countwell_label/sleep_policy.h",
+      "path": "firmware/inventory_counter_label/sleep_policy.h",
       "source_sha256": "613afd72dcd109d500a769da4906cc639623446b530e51ac212d1fbe06666d60",
-      "repository_sha256": "613afd72dcd109d500a769da4906cc639623446b530e51ac212d1fbe06666d60"
+      "repository_sha256": "c8ac84c0501743c231ea44a35df5b4d0b2ef26420d32b7c1357b094aa9679a3d"
     },
     {
-      "path": "firmware/countwell_label/sleep_runtime.h",
+      "path": "firmware/inventory_counter_label/sleep_runtime.h",
       "source_sha256": "bfcaa621d800422d0327e02110653f01c07d0c9cea8767540df99b4f22eafdd4",
-      "repository_sha256": "bfcaa621d800422d0327e02110653f01c07d0c9cea8767540df99b4f22eafdd4"
+      "repository_sha256": "b0efab0552d4f69fbe2a556704a29d5f8e9ebf7e8bfe455782391857391471e4"
     },
     {
       "path": "firmware/idf/CMakeLists.txt",
       "source_sha256": "1d90b70a685d834cdde2389f622b7b69212eca54da315c50870943f72e40eff9",
-      "repository_sha256": "1d90b70a685d834cdde2389f622b7b69212eca54da315c50870943f72e40eff9"
+      "repository_sha256": "65597d488f7331f00900212109496724901f0632548125c665643376200ac95b"
     },
     {
       "path": "firmware/idf/build.sh",
       "source_sha256": "afbfedbc38fa5014a65ea4d31955de55abefaf42c0205dc460333b3ecc7f0484",
-      "repository_sha256": "afbfedbc38fa5014a65ea4d31955de55abefaf42c0205dc460333b3ecc7f0484"
+      "repository_sha256": "e518a5ad4d2d0ca8eed60a005ad55a958e984892e1d37874c1bc8ee218111263"
     },
     {
       "path": "firmware/idf/export-build.py",
       "source_sha256": "1c738edd63bdee331737c961f07511a2a8152dcbeba400858d32528ef02439d4",
-      "repository_sha256": "1c738edd63bdee331737c961f07511a2a8152dcbeba400858d32528ef02439d4"
+      "repository_sha256": "dbf0acffa9507fab58d6a3de225884c8b321506d6a0698e7a8147e19dca66f27"
     },
     {
       "path": "firmware/idf/main/CMakeLists.txt",
       "source_sha256": "cbd0e005bf3588e774e496569cc75502efddaa1241ac5ba4565bd0dbbd14997f",
-      "repository_sha256": "cbd0e005bf3588e774e496569cc75502efddaa1241ac5ba4565bd0dbbd14997f"
+      "repository_sha256": "e10c05efc623ba46e8aa6d60ccf005882bdc3b9ab5466c87726361638e6af38e"
     },
     {
       "path": "firmware/idf/main/pm_build_check.cpp",
       "source_sha256": "5fafb0725c74021e8799d2efb63ea8eb91a198bde2454a6d25b7687e9594cbbf",
-      "repository_sha256": "5fafb0725c74021e8799d2efb63ea8eb91a198bde2454a6d25b7687e9594cbbf"
+      "repository_sha256": "c462ef5a5cde59f8f9ffe94c21a34d00f7cdaaf13f2c34eed12bf8f410db302c"
     },
     {
       "path": "firmware/idf/partitions.csv",
@@ -195,7 +195,7 @@
     {
       "path": "firmware/tests/ble_json_test.cpp",
       "source_sha256": "e4c60671e2e0e99cacfde9f3ac041196c6b6e3b62f48ec5f45500e0c4f07f4b6",
-      "repository_sha256": "e4c60671e2e0e99cacfde9f3ac041196c6b6e3b62f48ec5f45500e0c4f07f4b6"
+      "repository_sha256": "9a33469d3581a7de8ebfcda2b1e4ee8763dbea61092198e43ae1496c159298cc"
     },
     {
       "path": "firmware/tests/find_tag_test.cpp",
@@ -205,37 +205,37 @@
     {
       "path": "firmware/tests/light_sleep_wake_test.cpp",
       "source_sha256": "bacd816dfd02d5e4b5e481178681d64152c7181ac1cbdf660dd3f1f1e999cc32",
-      "repository_sha256": "bacd816dfd02d5e4b5e481178681d64152c7181ac1cbdf660dd3f1f1e999cc32"
+      "repository_sha256": "e7f526cb1cf43f344b6dc270c6a790b35423d4a37f9d522499f70f25e51ae9bc"
     },
     {
       "path": "firmware/tests/panel_power_test.cpp",
       "source_sha256": "b19bbc976216dbb78e56068e455cf163653646fdf7ef97eb48d065405e3bd387",
-      "repository_sha256": "b19bbc976216dbb78e56068e455cf163653646fdf7ef97eb48d065405e3bd387"
+      "repository_sha256": "a7d00efa182f72c4a177c9d4d4719236be82c7c89b56b76bdf2e34b8aaac415c"
     },
     {
       "path": "firmware/tests/panel_test.cpp",
       "source_sha256": "525c792d31e487437f975215f29729ba452f6f82f908b8883809c404bff68d7d",
-      "repository_sha256": "525c792d31e487437f975215f29729ba452f6f82f908b8883809c404bff68d7d"
+      "repository_sha256": "e1ad9ba8e8cba2892810ddcb7b3ae88fad935544f843049659f54ac60e1ae06f"
     },
     {
       "path": "firmware/tests/power_policy_test.cpp",
       "source_sha256": "6c0591d318f1ae40df361745630bd45118ee2c0603d43dfd15c7feeea530a36d",
-      "repository_sha256": "6c0591d318f1ae40df361745630bd45118ee2c0603d43dfd15c7feeea530a36d"
+      "repository_sha256": "a314d4a4b6ba6078f71ac02c044b794dd22d7f075ddfdb682508825354c493f8"
     },
     {
       "path": "firmware/tests/power_runtime_test.cpp",
       "source_sha256": "a8b50bcf2ac8e98ab4cb55e02b1ff3020b26484a5abc1951e4b33755ad774a73",
-      "repository_sha256": "a8b50bcf2ac8e98ab4cb55e02b1ff3020b26484a5abc1951e4b33755ad774a73"
+      "repository_sha256": "6fb974d3148c835b1f36732c89f3059dc2e0f86c3487aa372e2c0546ea67b7ff"
     },
     {
       "path": "firmware/tests/protocol_test.cpp",
       "source_sha256": "a3e0a9b84e72b3189240ba014598873dc36c4a7e06af743c354b5a382ef1c197",
-      "repository_sha256": "d30e5f3a3954e7df75f496a0767e4db0ed7b4d3387eb4f4b08f143290ad38c47"
+      "repository_sha256": "89f06d47146e0a26c2528972fa94d369eef32657e40000cddf850af444d36142"
     },
     {
       "path": "firmware/tests/provisioning_test.cpp",
       "source_sha256": "a2e564b31277b7dfe725677d6cb88a42876af3ad16e797e2be021bef4aa1617a",
-      "repository_sha256": "a2e564b31277b7dfe725677d6cb88a42876af3ad16e797e2be021bef4aa1617a"
+      "repository_sha256": "5c0f1e165eb3268bd79cd86bcfbeb2aa683d195ae4e0be11f2e02a11151b7de3"
     },
     {
       "path": "firmware/tests/provisioning_vector.json",
@@ -245,7 +245,7 @@
     {
       "path": "firmware/tests/run.ps1",
       "source_sha256": "3886afac1e3a7bb25fe0d91bee1e73070e07441c717493735bead3a3bf28667d",
-      "repository_sha256": "3886afac1e3a7bb25fe0d91bee1e73070e07441c717493735bead3a3bf28667d"
+      "repository_sha256": "c58198125753c30906cc41e19251993a434e4cc9de978cd65123a01a21dfdffc"
     },
     {
       "path": "firmware/tests/runtime/Arduino.h",
@@ -335,32 +335,33 @@
     {
       "path": "firmware/tests/sleep_test.cpp",
       "source_sha256": "6c4cf3dec14f9b95f4d3e517c8a8c0023eeaa23089aa4b66520f6f9df77d9724",
-      "repository_sha256": "6c4cf3dec14f9b95f4d3e517c8a8c0023eeaa23089aa4b66520f6f9df77d9724"
+      "repository_sha256": "2a28adb4e7b4488ba0cb7e346c7ef22b070681b7600f0c9b4659414847474b75"
     },
     {
       "path": "firmware/tests/unbonded_test.cpp",
       "source_sha256": "48579da6a5b5d892d916ddff72ea43c860ed72318ec190ccbf43f23dbed6227d",
-      "repository_sha256": "18720fa5e8d8db28655f31181468595b4f68b0d615aa157fa5568643838e1a65"
+      "repository_sha256": "afa53f908e5b1bb1f09636bd59335c0672f790c4eb7c6084486cfb8264fda1d1"
     },
     {
       "path": "scripts/enroll_display.py",
       "source_sha256": "68c93aff8b9f5f89b5655a540085a52db9e9f5643c0b483eb28981d4d0fb4e96",
-      "repository_sha256": "c1aeb6cb2ea34e793792da09588a153f83d6892d128abd6229aa7f8f6701dc3b"
+      "repository_sha256": "18e75a8c0470e26dfa357d7c8794978080dfce52e28c05b87fe2b334b1d2b31c"
     },
     {
       "path": "scripts/setup_display.py",
       "source_sha256": "2cd143a0982837c400c024fe4ecab9f84287c8470c5de00689e77771a5576920",
-      "repository_sha256": "2cd143a0982837c400c024fe4ecab9f84287c8470c5de00689e77771a5576920"
+      "repository_sha256": "d36e9d39722910a51557c720ae18e0c39185294e3fb59818651e8e517aa8399d"
     },
     {
       "path": "tests/test_enroll_display.py",
       "source_sha256": "7941f0dcdc5b1a664a51b74683a1ddf24b908a4cc7d8c6122120f15e42b0545c",
-      "repository_sha256": "f74a917383eac33bb04099bebdb8fd4fa9615989e2bbf8ad9fe48b3d44a8beff"
+      "repository_sha256": "9de52298c6bef44fcbde51e3cbe4e3a0567c3a93e0704f1b60f97555fea50b7d"
     },
     {
       "path": "tests/test_setup_display.py",
       "source_sha256": "d6c44644967b55620f997dd12fc052fbb6604f45d89fcebc110298979bd19ba6",
       "repository_sha256": "d6c44644967b55620f997dd12fc052fbb6604f45d89fcebc110298979bd19ba6"
     }
-  ]
+  ],
+  "refactor": "Inventory Counter naming; CW2/CW3/CWUSB, UUIDs, cwble2 storage and device IDs retained"
 }

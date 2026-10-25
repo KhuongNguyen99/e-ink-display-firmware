@@ -27,7 +27,7 @@ def test_enrollment_records_public_identity_without_changing_box_assignment():
 
 def test_wrong_firmware_authority_cannot_enroll():
     port = Port([response({"ok": True, "enrollment": {"authority_key_id": "wrong"}})])
-    with pytest.raises(SetupError, match="built for this Countwell"):
+    with pytest.raises(SetupError, match="built for this Inventory Counter"):
         enroll_display(port, lambda *_: {"authority_key_id": "correct"}, lambda _: pytest.fail("must not register"))
 
 
@@ -39,9 +39,9 @@ def test_registration_uses_local_container_admin_access_without_http_or_secret_d
         calls.append((command, options))
         return SimpleNamespace(stdout='{"enrolled":true}')
     monkeypatch.setattr("scripts.enroll_display.subprocess.run", run)
-    assert register_in_container(enrollment, "countwell-api")["enrolled"] is True
+    assert register_in_container(enrollment, "inventory-counter-api")["enrolled"] is True
     command, options = calls[0]
-    assert command[:5] == ["docker", "exec", "-i", "countwell-api", "python"]
+    assert command[:5] == ["docker", "exec", "-i", "inventory-counter-api", "python"]
     import json
     assert json.loads(options["input"]) == enrollment
     assert not {"key", "token", "private_key"}.intersection(json.loads(options["input"]))
