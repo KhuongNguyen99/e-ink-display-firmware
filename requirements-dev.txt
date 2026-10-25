@@ -1,0 +1,2 @@
+-r firmware/requirements-setup.txt
+pytest==9.1.1

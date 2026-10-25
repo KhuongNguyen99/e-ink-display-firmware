@@ -1,0 +1,39 @@
+{
+  "warning": "PUBLIC TEST FIXTURE ONLY. These private scalars are deliberately 1, 2, 3, 4 and must never be used on real devices.",
+  "authority_private_scalar": 1,
+  "claim_private_scalar": 2,
+  "device_private_scalar": 3,
+  "server_private_scalar": 4,
+  "authority": {
+    "protocol": 1,
+    "algorithm": "P256-HKDF-SHA256-AES256GCM-ECDSA",
+    "authority_key_id": "698bea63dc44a344",
+    "public_key": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5"
+  },
+  "claim_public_key": "047cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc4766997807775510db8ed040293d9ac69f7430dbba7dade63ce982299e04b79d227873d1",
+  "setup": {
+    "protocol": 1,
+    "device_id": "cw-setup-fixture",
+    "panel_profile": "ssd1680",
+    "setup_open": true,
+    "authority_key_id": "698bea63dc44a344",
+    "setup_nonce": "101112131415161718191a1b1c1d1e1f",
+    "device_public_key": "045ecbe4d1a6330a44c8f7ef951d4bf165e6c6b721efada985fb41661bc6e7fd6c8734640c4998ff7e374b06ce1a64a2ecd82ab036384fb83d9a79b127a27d5032",
+    "device_signature": "4d6d178c7d83a7d6457bf1504c8ccc4b75cb049c0fe92a78deeea2df7b4fdb12566f97e4df762468818387fd360f9db64b21ed6d177ac26efaa2cd63a263630f"
+  },
+  "command": {
+    "op": "provision",
+    "authority_key_id": "698bea63dc44a344",
+    "box_id": "01234567-89ab-4cde-8123-456789abcdef",
+    "generation": "0123456789abcdef",
+    "setup_nonce": "101112131415161718191a1b1c1d1e1f",
+    "server_public_key": "04e2534a3532d08fbba02dde659ee62bd0031fe2db785596ef509302446b030852e0f1575a4c633cc719dfee5fda862d764efc96c3f30ee0055c42c23f184ed8c6",
+    "iv": "202122232425262728292a2b",
+    "ciphertext": "d5c0db5af7d795aeef10050699d8a3309b037da5662ea9fd96114150aa7c148f",
+    "tag": "38e0e53e7ee3ed1bf75670c7526a1709",
+    "signature": "4769ef74827d7e32cdd92ab006f939794e102127ea72c4fbafb60fc42cbea5384fa459b422bc530d98b2f591f3d62c2c2e437c44fb750bc83b9558844eda3360"
+  },
+  "permanent_key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "setup_context": "CW3|setup|698bea63dc44a344|cw-setup-fixture|ssd1680|101112131415161718191a1b1c1d1e1f|045ecbe4d1a6330a44c8f7ef951d4bf165e6c6b721efada985fb41661bc6e7fd6c8734640c4998ff7e374b06ce1a64a2ecd82ab036384fb83d9a79b127a27d5032",
+  "provision_context": "CW3|provision|698bea63dc44a344|cw-setup-fixture|ssd1680|01234567-89ab-4cde-8123-456789abcdef|0123456789abcdef|101112131415161718191a1b1c1d1e1f|045ecbe4d1a6330a44c8f7ef951d4bf165e6c6b721efada985fb41661bc6e7fd6c8734640c4998ff7e374b06ce1a64a2ecd82ab036384fb83d9a79b127a27d5032|04e2534a3532d08fbba02dde659ee62bd0031fe2db785596ef509302446b030852e0f1575a4c633cc719dfee5fda862d764efc96c3f30ee0055c42c23f184ed8c6|202122232425262728292a2b"
+}

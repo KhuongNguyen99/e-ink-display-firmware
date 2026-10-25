@@ -1,0 +1,14 @@
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+.env.*
+build/
+output/
+work/
+*.bin
+*.elf
+*.map
+authority-public.json
