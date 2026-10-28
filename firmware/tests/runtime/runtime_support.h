@@ -24,13 +24,29 @@ using BaseType_t = int;
 constexpr int pdFALSE = 0;
 constexpr int pdTRUE = 1;
 static unsigned testIsrNotifyCalls = 0, testIsrYieldCalls = 0;
-inline void vTaskNotifyGiveFromISR(TaskHandle_t, BaseType_t *woken) { ++testIsrNotifyCalls; *woken = pdTRUE; }
+static unsigned testTaskNotifyCalls = 0, testNotifyTakeCalls = 0, testPendingTaskNotifications = 0;
+static TaskHandle_t testLastTaskNotified = nullptr;
+static TickType_t testLastNotifyTimeout = 0;
+static uint32_t testLastNotifyTakeResult = 0;
+static void (*testNotifyTakeHook)() = nullptr;
+inline void vTaskNotifyGiveFromISR(TaskHandle_t task, BaseType_t *woken) {
+  ++testIsrNotifyCalls; ++testPendingTaskNotifications; testLastTaskNotified = task; *woken = pdTRUE;
+}
 inline void testYieldFromIsr() { ++testIsrYieldCalls; }
 #define portYIELD_FROM_ISR() testYieldFromIsr()
 inline TickType_t pdMS_TO_TICKS(uint32_t ms) { return ms; }
 inline TaskHandle_t xTaskGetCurrentTaskHandle() { return reinterpret_cast<void *>(1); }
-inline void xTaskNotifyGive(TaskHandle_t) {}
-inline uint32_t ulTaskNotifyTake(int, TickType_t) { return 0; }
+inline void xTaskNotifyGive(TaskHandle_t task) {
+  ++testTaskNotifyCalls; ++testPendingTaskNotifications; testLastTaskNotified = task;
+}
+inline uint32_t ulTaskNotifyTake(int clearOnExit, TickType_t ticks) {
+  ++testNotifyTakeCalls; testLastNotifyTimeout = ticks;
+  if (testNotifyTakeHook) { auto hook = testNotifyTakeHook; testNotifyTakeHook = nullptr; hook(); }
+  testLastNotifyTakeResult = testPendingTaskNotifications;
+  if (clearOnExit) testPendingTaskNotifications = 0;
+  else if (testPendingTaskNotifications) --testPendingTaskNotifications;
+  return testLastNotifyTakeResult;
+}
 constexpr int HIGH = 1, LOW = 0, OUTPUT = 1, INPUT_PULLUP = 2;
 #define IRAM_ATTR
 using portMUX_TYPE = int;
@@ -56,9 +72,22 @@ inline size_t strlcpy(char *out, const char *in, size_t size) {
 }
 struct TestSerial {
   std::string output;
+  std::string input;
+  void (*receiveCallback)() = nullptr;
+  bool receiveOnlyOnTimeout = true;
   void begin(int) {}
-  int available() { return 0; }
-  int read() { return -1; }
+  void onReceive(void (*callback)(), bool onlyOnTimeout = true) {
+    receiveCallback = callback; receiveOnlyOnTimeout = onlyOnTimeout;
+  }
+  void inject(const std::string &bytes) {
+    input += bytes;
+    if (receiveCallback) receiveCallback();
+  }
+  int available() { return static_cast<int>(input.size()); }
+  int read() {
+    if (input.empty()) return -1;
+    const unsigned char byte = static_cast<unsigned char>(input[0]); input.erase(0, 1); return byte;
+  }
   void print(const std::string &s) { output += s; }
   void println(const std::string &s) { output += s + "\n"; }
   void printf(const char *format, ...) {

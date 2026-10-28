@@ -331,7 +331,7 @@ int main() {
   connectionCallbacks.onConnect(bleServer, &event);
   const std::string normalIdentity = identity().c_str();
   assert(normalIdentity.size() <= 512 && normalIdentity.find("\"find_tag\":true") != std::string::npos);
-  assert(normalIdentity.find("\"firmware_version\":\"3.7.0\"") != std::string::npos);
+  assert(normalIdentity.find("\"firmware_version\":\"3.8.0\"") != std::string::npos);
   const SavedFrame savedFrame = lastFrame;
   const SavedName savedName = lastName;
   const auto savedStorage = preferences.values;

@@ -4,14 +4,15 @@
 
 namespace power_policy {
 
-constexpr uint32_t kFastWindowMs = 30000;
+constexpr uint32_t kFastWindowMs = 5000;
 constexpr uint32_t kMenuHoldMs = 5000;
 constexpr uint32_t kPairWindowMs = 120000;
 constexpr uint32_t kTransferTimeoutMs = 60000;
 constexpr uint32_t kIdleDisconnectMs = 30000;
 constexpr uint32_t kPollMs = 25;
-constexpr uint16_t kFastAdvertisingUnits = 0x20;   // 20 ms, in 0.625 ms units
-constexpr uint16_t kSlowAdvertisingUnits = 0x320;  // 500 ms
+constexpr uint32_t kIdleWaitMs = 1000;
+constexpr uint16_t kFastAdvertisingUnits = 0xa0;   // 100 ms, in 0.625 ms units
+constexpr uint16_t kSlowAdvertisingUnits = 0x640;  // 1 second
 
 // Subtraction on uint32_t keeps deadlines valid across millis() wraparound.
 inline uint32_t remaining(uint32_t now, uint32_t started, uint32_t duration) {
@@ -31,6 +32,9 @@ struct FastWindow {
 };
 
 struct WaitState {
+  bool idleSleepReady = false;
+  uint32_t refreshLeft = UINT32_MAX;
+  uint32_t advertisingRetryLeft = UINT32_MAX;
   bool menuHeld = false;
   bool menuLatched = false;
   uint32_t menuStarted = 0;
@@ -48,7 +52,11 @@ struct WaitState {
 };
 
 inline uint32_t loopWaitMs(uint32_t now, const WaitState &s) {
-  uint32_t wait = kPollMs;
+  // A verified GPIO/UART wake path permits longer quiescent waits. Keep
+  // active work and every wake-setup failure on the responsive polling path.
+  const bool idle = s.idleSleepReady && !s.connected && !s.pairingOpen &&
+      !s.receiving && !s.busy && !s.menuHeld;
+  uint32_t wait = idle ? kIdleWaitMs : kPollMs;
   auto shorten = [&wait](uint32_t left) {
     if (left < wait) wait = left;
   };
@@ -61,6 +69,8 @@ inline uint32_t loopWaitMs(uint32_t now, const WaitState &s) {
       shorten(remaining(now, s.connectionStarted, kIdleDisconnectMs));
   }
   if (s.fastWindowLeft) shorten(s.fastWindowLeft);
+  shorten(s.refreshLeft);
+  shorten(s.advertisingRetryLeft);
   return wait ? wait : 1;
 }
 

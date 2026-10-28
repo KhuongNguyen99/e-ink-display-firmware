@@ -13,7 +13,7 @@ Identify the fitted display controller before flashing. USB identity and the ESP
 
 The connected demo board was identified as **SSD1680** by an exact match between its original factory application and Elecrow's V1.0 factory image. Both profiles remain available for other boards. See [provenance](NOTICE.md). A factory backup may contain private settings; do not publish it.
 
-Build firmware 3.7.0 from this directory with the pinned Arduino ESP32 **2.0.10** component and a rebuilt ESP-IDF **4.4.5** SDK. The build requires Docker and Git:
+Build firmware 3.8.0 from this directory with the pinned Arduino ESP32 **2.0.10** component and a rebuilt ESP-IDF **4.4.5** SDK. The build requires Docker and Git:
 
 ```powershell
 $publicKey = '<authority-public-key>'
@@ -23,7 +23,7 @@ $publicKey = '<authority-public-key>'
 
 Export the installation's public authority key from `GET /api/display-setup/authority` and supply its `public_key` (130 lowercase hexadecimal characters). This is public material; the backend signing private key stays in its persistent data volume. `INVENTORY_COUNTER_PROVISIONING_PUBLIC_KEY` can supply the same build input. The build stages this public anchor under the isolated cache and refuses a missing key. Test fixture keys must never be used for deployed builds.
 
-`build-idf.ps1` rebuilds the SDK with power management, tickless idle, BLE modem sleep and main-crystal retention in light sleep. It uses a separate `C:\cwesp32-idf` cache by default; `-CacheRoot` selects another location. The output is `C:\cwesp32-idf\source-ssd1680\output`, including `flasher_args.json`, referenced binaries, the ELF/map files, `sdkconfig`, and SHA-256 hashes. The older `build.ps1` uses the stock Arduino SDK and cannot provide automatic light sleep for this version. It remains available for comparison, not for installing the 3.7.0 power behavior.
+`build-idf.ps1` rebuilds the SDK with power management, tickless idle, BLE modem sleep and main-crystal retention in light sleep. It uses a separate `C:\cwesp32-idf` cache by default; `-CacheRoot` selects another location. The output is `C:\cwesp32-idf\source-ssd1680\output`, including `flasher_args.json`, referenced binaries, the ELF/map files, `sdkconfig`, and SHA-256 hashes. The older `build.ps1` uses the stock Arduino SDK and cannot provide automatic light sleep for this version. It remains available for comparison, not for installing the 3.8.0 power behavior.
 
 Builds never flash or erase the board. Identify the fitted panel and verify the generated `flasher_args.json` and binary hashes before a separate installation step.
 
@@ -56,7 +56,7 @@ Phone provisioning uses authenticated P-256 ECDH, HKDF-SHA256 and AES-256-GCM in
 
 ## Transfer protocol
 
-Firmware **3.7.0** preserves wire protocol **2** and these custom UUIDs:
+Firmware **3.8.0** preserves wire protocol **2** and these custom UUIDs:
 
 | Characteristic | UUID | Access |
 | --- | --- | --- |
@@ -95,13 +95,13 @@ Stale revisions and conflicting hashes are rejected. An identical committed revi
 
 ## Power use
 
-Firmware 3.7.0 keeps BLE available while the tag is powered. A short Menu press toggles QR visibility; the QR hides automatically 120 seconds after it is shown. Holding Menu for five seconds still opens the encrypted setup window. With trusted QR bounds, a hide refresh whites out only the QR area, leaving the product name, image and quantity visible. The saved canonical frame and hash remain intact so Menu can restore the QR. Without trusted bounds, the firmware blanks the full screen. A failed refresh is retried while BLE remains available.
+Firmware 3.8.0 keeps BLE available while the tag is powered. A short Menu press toggles QR visibility; the QR hides automatically 120 seconds after it is shown. Holding Menu for five seconds still opens the encrypted setup window. With trusted QR bounds, a hide refresh whites out only the QR area, leaving the product name, image and quantity visible. The saved canonical frame and hash remain intact so Menu can restore the QR. Without trusted bounds, the firmware blanks the full screen. A failed refresh is retried while BLE remains available.
 
-The rebuilt SDK enables dynamic frequency scaling and automatic light sleep during idle waits, with a 240 MHz maximum and an 80 MHz minimum. Scoped CPU locks cover hashing, provisioning and panel work; a no-light-sleep lock covers the main loop's active work and is released before its notification wait. The BLE controller uses MODE1 modem sleep with the main crystal selected. The crystal remains powered during light sleep so BLE can continue; this limits any expected power saving. Advertising uses a 500 ms interval after 30 seconds, with 20 ms intervals after startup or a disconnect, and throughout the two-minute setup window. Default and advertising transmit power are 0 dBm. The board LED stays off, and the application waits for notifications with at most 25 ms between button/USB checks. There are no measured battery-current or lifetime results for this change.
+The SDK also enables `CONFIG_PM_SLP_IRAM_OPT` and `CONFIG_PM_RTOS_IDLE_OPT` to shorten sleep/idle transitions. The build rejects missing optimizations and checks available IRAM during linking. The rebuilt SDK enables dynamic frequency scaling and automatic light sleep during idle waits, with a 240 MHz maximum and an 80 MHz minimum. Scoped CPU locks cover hashing, provisioning and panel work; a no-light-sleep lock covers the main loop's active work and is released before its notification wait. The BLE controller uses MODE1 modem sleep with the main crystal selected. The crystal remains powered during light sleep so BLE can continue; this limits any expected power saving. Connectable advertising uses a 1,000 ms idle interval. A five-second discovery window after startup or disconnect uses 100 ms advertising; the physical setup window also uses 100 ms. Discovery can take a few seconds while idle. Default and advertising transmit power are 0 dBm. The board LED stays off, and the application can wait up to 1,000 ms between quiescent checks. Menu and UART RX callbacks notify the main task immediately. It retains 25 ms polling during a connection, setup, button debounce/hold, recent USB traffic, or unavailable wake support; QR, Find, and retry deadlines shorten idle waits as needed. There are no measured battery-current or lifetime results for this change.
 
 After a successful SSD1680 refresh, the driver disables the analog supply/oscillator and enters controller deep sleep. The image remains visible. The next refresh resets and initializes the controller; GPIO7 remains high. The JD79661 driver retains its existing sequence.
 
-The read-only USB command `{"op":"usb_power"}` reports CPU speed, BLE modem-sleep setup, automatic-PM availability and configuration/readback results, lock results, advertising mode/interval, transmit-power status, QR visibility and its remaining timer. `{"op":"usb_pm"}` dumps ESP-IDF PM lock/profile statistics to the USB console and returns a result code. `light_sleep_observed` latches a nonzero wake cause after successful light sleep on a normal boot; `last_observed_light_sleep_wake_cause` identifies that wake source. PM mode percentages measure sleep eligibility, not actual slept time. Neither diagnostic establishes battery current or runtime. Measure at the battery connector with USB disconnected to quantify power use. The slower advertisement and lower transmit power may increase discovery time or reduce range.
+The read-only USB command `{"op":"usb_power"}` reports CPU speed, BLE modem-sleep setup, automatic-PM availability and configuration/readback results, lock results, advertising mode/interval, transmit-power status, QR visibility and its remaining timer. `loop_iterations` counts main-loop passes and `max_loop_wait_ms` records the largest scheduled notification wait; neither measures current or actual sleep duration. `{"op":"usb_pm"}` dumps ESP-IDF PM lock/profile statistics to the USB console and returns a result code. `light_sleep_observed` latches a nonzero wake cause after successful light sleep on a normal boot; `last_observed_light_sleep_wake_cause` identifies that wake source. PM mode percentages measure sleep eligibility, not actual slept time. Neither diagnostic establishes battery current or runtime. Measure at the battery connector with USB disconnected to quantify power use. Slower idle advertising can increase discovery time.
 
 ## Verification
 

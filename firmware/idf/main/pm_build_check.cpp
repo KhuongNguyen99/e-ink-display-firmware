@@ -12,6 +12,9 @@
 #if !CONFIG_PM_ENABLE || !CONFIG_FREERTOS_USE_TICKLESS_IDLE || !CONFIG_BT_CTRL_MODEM_SLEEP || !CONFIG_BT_CTRL_MAIN_XTAL_PU_DURING_LIGHT_SLEEP
 #error Rebuild the SDK with Bluetooth modem sleep and automatic light sleep enabled
 #endif
+#if !CONFIG_PM_SLP_IRAM_OPT || !CONFIG_PM_RTOS_IDLE_OPT
+#error Rebuild the SDK with optimized light-sleep and RTOS idle transitions
+#endif
 #if !CONFIG_BT_BLE_42_FEATURES_SUPPORTED
 #error Arduino 2.0.10 requires the legacy BLE advertising APIs
 #endif

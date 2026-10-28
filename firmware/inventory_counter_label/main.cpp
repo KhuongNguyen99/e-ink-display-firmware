@@ -27,7 +27,7 @@
 #include "menu_button.h"
 
 using namespace inventory_counter;
-constexpr char kVersion[] = "3.7.0";
+constexpr char kVersion[] = "3.8.0";
 constexpr uint32_t kRecordMagic = 0x43574232;
 constexpr uint32_t kNameMagic = 0x43574e31;
 constexpr uint32_t kQrMagic = 0x43575131;
@@ -126,6 +126,7 @@ bool usbRecentlyActive = false;
 bool normalBootForSleepObservation = false, lightSleepObserved = false;
 esp_sleep_wakeup_cause_t lastObservedLightSleepWake = ESP_SLEEP_WAKEUP_UNDEFINED;
 uint32_t usbActiveAt = 0;
+uint32_t loopIterations = 0, maxLoopWaitMs = 0;
 
 void wakeLoop() {
   if (powerLoopTaskHandle) xTaskNotifyGive(powerLoopTaskHandle);
@@ -666,6 +667,8 @@ void processUsbCommand(char *message) {
     addPowerRuntimeDiagnostics(power);
     const auto &wake = inventory_counter_power::lightSleepWakeState();
     cJSON_AddBoolToObject(power, "light_sleep_observed", lightSleepObserved);
+    addJsonUint32(power, "loop_iterations", loopIterations);
+    addJsonUint32(power, "max_loop_wait_ms", maxLoopWaitMs);
     cJSON_AddNumberToObject(power, "last_observed_light_sleep_wake_cause", lastObservedLightSleepWake);
     cJSON_AddNumberToObject(power, "reset_reason", esp_reset_reason());
     cJSON_AddBoolToObject(power, "light_sleep_wake_ready", wake.ready);
@@ -689,7 +692,7 @@ void processUsbCommand(char *message) {
     const AdvertisingPhase phase = advertisingPhase;
     cJSON_AddBoolToObject(power, "advertising_active", phase == AdvertisingPhase::Active);
     cJSON_AddStringToObject(power, "advertising_mode", advertisingFast ? "fast" : "idle");
-    addJsonUint32(power, "advertising_interval_ms", advertisingFast ? 20 : 500);
+    addJsonUint32(power, "advertising_interval_ms", uint32_t(advertisingFast ? power_policy::kFastAdvertisingUnits : power_policy::kSlowAdvertisingUnits) * 625 / 1000);
     cJSON_AddNumberToObject(power, "ble_tx_target_dbm", 0);
     cJSON_AddBoolToObject(power, "ble_tx_0dbm",
         esp_ble_tx_power_get(ESP_BLE_PWR_TYPE_DEFAULT) == ESP_PWR_LVL_N0 &&
@@ -981,7 +984,7 @@ void serviceAdvertising(uint32_t now) {
     Serial.println("BLE advertising could not start; retrying");
   } else {
     Serial.printf("BLE advertising %s (%u ms)\n", shouldFast ? "fast" : "idle",
-                  shouldFast ? 20u : 500u);
+                  unsigned(units) * 625u / 1000u);
   }
 }
 void loadSavedState() {
@@ -1016,6 +1019,9 @@ void setup() {
   Serial.begin(115200);
   releaseSleepPins();
   powerLoopTaskHandle = xTaskGetCurrentTaskHandle();
+  // UART wake alone does not unblock loopTask's notification wait. The Arduino
+  // RX callback runs in a task, so the normal task notification is appropriate.
+  Serial.onReceive(wakeLoop, false);
   stateMutex = xSemaphoreCreateMutex();
   pinMode(19, OUTPUT); digitalWrite(19, LOW);  // Keep the board LED off.
   pinMode(panel::kMenuPin, INPUT_PULLUP); pinMode(panel::kBackPin, INPUT_PULLUP);
@@ -1129,6 +1135,7 @@ void serviceQrVisibility(uint32_t now) {
 }
 void loop() {
   if (!inventory_counter_power::holdAwakeForWork()) abort();
+  ++loopIterations;
   bool menuHold = false;
   {
     Lock lock;
@@ -1207,9 +1214,15 @@ void loop() {
     wait.connectionTouched = connectionTouched; wait.connectionAuthorized = connectionAuthorized;
     wait.connectionStarted = connectionStarted;
     wait.fastWindowLeft = fastAdvertisingWindow.left(waitNow);
+    auto refreshDue = [&wait](uint32_t left) { if (left < wait.refreshLeft) wait.refreshLeft = left; };
+    if (awakeWindow.armed) refreshDue(awakeWindow.left(waitNow));
+    if (findActive && findTimerArmed)
+      refreshDue(power_policy::remaining(waitNow, findStarted, kFindDurationMs));
+    if (qrRetryPending) refreshDue(power_policy::remaining(waitNow, qrRetryAt, 1000));
+    if (advertisingRetryPending)
+      wait.advertisingRetryLeft = power_policy::remaining(waitNow, advertisingRetryAt, 1000);
   }
   if (Serial.available()) return;
-  const TickType_t ticks = pdMS_TO_TICKS(power_policy::loopWaitMs(waitNow, wait));
   // A UART wake preamble must keep the receiver awake for the following command.
   const bool usbWaiting = usbRecentlyActive && power_policy::remaining(millis(), usbActiveAt, 1000);
   bool buttonStable;
@@ -1221,6 +1234,10 @@ void loop() {
   }
   const bool wakeArmed = !usbWaiting && buttonStable && !wait.pairingOpen &&
       inventory_counter_power::automaticPmState().auto_light_sleep && inventory_counter_power::armLightSleepWake();
+  wait.idleSleepReady = wakeArmed;
+  const uint32_t waitMs = power_policy::loopWaitMs(waitNow, wait);
+  if (waitMs > maxLoopWaitMs) maxLoopWaitMs = waitMs;
+  const TickType_t ticks = pdMS_TO_TICKS(waitMs);
   if (wakeArmed) inventory_counter_power::allowLightSleepWhileWaiting();
   ulTaskNotifyTake(pdTRUE, ticks ? ticks : 1);
   if (!inventory_counter_power::holdAwakeForWork()) abort();

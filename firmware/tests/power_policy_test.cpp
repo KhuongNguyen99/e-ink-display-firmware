@@ -5,8 +5,12 @@
 
 int main() {
   using namespace power_policy;
-  static_assert(kFastAdvertisingUnits * 625 == 20000, "fast interval must be 20 ms");
-  static_assert(kSlowAdvertisingUnits * 625 == 500000, "idle interval must be 500 ms");
+  static_assert(kFastWindowMs == 5000 && kPollMs == 25 && kIdleWaitMs == 1000,
+      "the fast window, active poll, and idle wait are deliberate power budgets");
+  static_assert(kFastAdvertisingUnits == 0xa0 && kFastAdvertisingUnits * 625 == 100000,
+      "fast advertising interval must be 100 ms");
+  static_assert(kSlowAdvertisingUnits == 0x640 && kSlowAdvertisingUnits * 625 == 1000000,
+      "idle advertising interval must be 1000 ms");
 
   FastWindow fast;
   assert(!fast.active(0));
@@ -49,4 +53,34 @@ int main() {
   state = WaitState{};
   state.fastWindowLeft = 6;
   assert(loopWaitMs(100, state) == 6);
+
+  state = WaitState{};
+  state.idleSleepReady = true;
+  assert(loopWaitMs(100, state) == kIdleWaitMs);
+  state.connected = true; assert(loopWaitMs(100, state) == kPollMs); state.connected = false;
+  state.pairingOpen = true; assert(loopWaitMs(100, state) == kPollMs); state.pairingOpen = false;
+  state.receiving = true; assert(loopWaitMs(100, state) == kPollMs); state.receiving = false;
+  state.busy = true; assert(loopWaitMs(100, state) == kPollMs); state.busy = false;
+  state.menuHeld = true; state.menuLatched = true;
+  assert(loopWaitMs(100, state) == kPollMs); state.menuHeld = false;
+
+  state.fastWindowLeft = 997;
+  assert(loopWaitMs(100, state) == 997);
+  state.fastWindowLeft = 0;
+  state.refreshLeft = 733;
+  assert(loopWaitMs(100, state) == 733);
+  state.advertisingRetryLeft = 411;
+  assert(loopWaitMs(100, state) == 411);
+  state.refreshLeft = 50;
+  assert(loopWaitMs(100, state) == 50);
+  state.refreshLeft = 0;
+  assert(loopWaitMs(100, state) == 1);
+
+  state = WaitState{}; state.idleSleepReady = true;
+  state.refreshLeft = remaining(8, UINT32_MAX - 10u, 1000);
+  assert(state.refreshLeft == 981);
+  assert(loopWaitMs(8, state) == 981);
+  state.refreshLeft = UINT32_MAX;
+  state.advertisingRetryLeft = remaining(8, UINT32_MAX - 10u, 1000);
+  assert(loopWaitMs(8, state) == 981);
 }

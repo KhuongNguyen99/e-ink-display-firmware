@@ -41,6 +41,8 @@ g++ -std=c++11 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-pie -no-p
 timeout 15 /tmp/unbonded-test
 g++ -std=c++11 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-pie -no-pie -DINVENTORY_COUNTER_SSD1680 -I/src/tests/runtime -I/tmp/cjson /src/tests/sleep_test.cpp /tmp/cjson/cJSON.o $crypto_flags -o /tmp/sleep-test
 timeout 30 /tmp/sleep-test
+g++ -std=c++11 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-pie -no-pie -DINVENTORY_COUNTER_SSD1680 -I/src/tests/runtime -I/tmp/cjson /src/tests/idle_power_test.cpp /tmp/cjson/cJSON.o $crypto_flags -o /tmp/idle-power-test
+timeout 30 /tmp/idle-power-test
 g++ -std=c++11 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-pie -no-pie -DINVENTORY_COUNTER_SSD1680 -I/src/tests/runtime -I/tmp/cjson /src/tests/find_tag_test.cpp /tmp/cjson/cJSON.o $crypto_flags -o /tmp/find-tag-test
 timeout 30 /tmp/find-tag-test
 g++ -std=c++11 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-pie -no-pie -DINVENTORY_COUNTER_SSD1680 -I/src/tests/runtime -I/tmp/cjson /src/tests/provisioning_test.cpp /tmp/cjson/cJSON.o $crypto_flags -o /tmp/provisioning-test

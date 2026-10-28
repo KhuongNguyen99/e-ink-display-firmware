@@ -4,7 +4,7 @@
   "source_head": "1102b8ae42f2cd7f8debd7dcf410369eb55bb4b8",
   "includes_uncommitted_source_changes": true,
   "source_archive_sha256": "69db8388d70db94e9c6e7132fd6b6c7ad2bcd792ff8087a2c5f58d602de899db",
-  "firmware_version": "3.7.0",
+  "firmware_version": "3.8.0",
   "normalization": "CRLF to LF; firmware README verification link adapted to standalone layout",
   "files": [
     {
@@ -25,7 +25,7 @@
     {
       "path": "firmware/README.md",
       "source_sha256": "e756f2896ef184722fd539b30bb9eaad1d3f76eee7311c7e21e54da6389fedcd",
-      "repository_sha256": "2099d145cdd7247b6c2d0b2e7c112408c53b2ab11dbcef8f29d92f8aa8031f88"
+      "repository_sha256": "69fe4166cce71afb970521a539c2d6689b8b807a281e56c7d5768e9c32297ae9"
     },
     {
       "path": "firmware/build-idf.ps1",
@@ -90,7 +90,7 @@
     {
       "path": "firmware/inventory_counter_label/main.cpp",
       "source_sha256": "730578a27e1aaa1f6a8e845f0dc0547d8059735729a106e5e82ee73e0405f302",
-      "repository_sha256": "bfd316e9b94057026b71836aad19031c690010dc767fb16f1984a7f4403cd0a1"
+      "repository_sha256": "950c767531f69195831e4d7667d1f883763fe71c346deae5e04b6c13585fe672"
     },
     {
       "path": "firmware/inventory_counter_label/menu_button.h",
@@ -110,7 +110,7 @@
     {
       "path": "firmware/inventory_counter_label/power_policy.h",
       "source_sha256": "ea4167feaf80445219a87e360d8d809757594e14d2fc47635af1e6aa613f0644",
-      "repository_sha256": "ea4167feaf80445219a87e360d8d809757594e14d2fc47635af1e6aa613f0644"
+      "repository_sha256": "10116132848d473b835c1917dd227d81dee5dc63549187cb8ec78f586895a86f"
     },
     {
       "path": "firmware/inventory_counter_label/power_runtime.h",
@@ -170,7 +170,7 @@
     {
       "path": "firmware/idf/main/pm_build_check.cpp",
       "source_sha256": "5fafb0725c74021e8799d2efb63ea8eb91a198bde2454a6d25b7687e9594cbbf",
-      "repository_sha256": "c462ef5a5cde59f8f9ffe94c21a34d00f7cdaaf13f2c34eed12bf8f410db302c"
+      "repository_sha256": "e9f5e1eaec3fd478bd06e990ffdaed933043e44dbbcaf3fbe8e5449a28f0bf67"
     },
     {
       "path": "firmware/idf/partitions.csv",
@@ -180,7 +180,7 @@
     {
       "path": "firmware/idf/sdkconfig.defaults",
       "source_sha256": "d046d907a5bb7ab6bd38adbae6ca0ffd1223e26c672c9ee928046c765bfeba82",
-      "repository_sha256": "d046d907a5bb7ab6bd38adbae6ca0ffd1223e26c672c9ee928046c765bfeba82"
+      "repository_sha256": "b063a8de6cca37b433b1033d0fc48ebe4873693115c057d23eb23451a333433c"
     },
     {
       "path": "firmware/requirements-setup.txt",
@@ -220,7 +220,7 @@
     {
       "path": "firmware/tests/power_policy_test.cpp",
       "source_sha256": "6c0591d318f1ae40df361745630bd45118ee2c0603d43dfd15c7feeea530a36d",
-      "repository_sha256": "a314d4a4b6ba6078f71ac02c044b794dd22d7f075ddfdb682508825354c493f8"
+      "repository_sha256": "49275b336d311567efd33024d6151bbaf572916eb9139d9fca1a615f4ae6f82f"
     },
     {
       "path": "firmware/tests/power_runtime_test.cpp",
@@ -245,7 +245,7 @@
     {
       "path": "firmware/tests/run.ps1",
       "source_sha256": "3886afac1e3a7bb25fe0d91bee1e73070e07441c717493735bead3a3bf28667d",
-      "repository_sha256": "c58198125753c30906cc41e19251993a434e4cc9de978cd65123a01a21dfdffc"
+      "repository_sha256": "f5e2a33514ac33855bce13593a1c57c6d254e48682e1cc936aa160d779643c9e"
     },
     {
       "path": "firmware/tests/runtime/Arduino.h",
@@ -330,7 +330,7 @@
     {
       "path": "firmware/tests/runtime/runtime_support.h",
       "source_sha256": "47e4bfe630dcb96c24435f4378528ccba90c93f6818de8124a8802c6c65e3e1e",
-      "repository_sha256": "47e4bfe630dcb96c24435f4378528ccba90c93f6818de8124a8802c6c65e3e1e"
+      "repository_sha256": "96b9abd51dc2072f8e7bc31ad7a9c41bc60b477e2bcba509a41dc4ff6c90cc5e"
     },
     {
       "path": "firmware/tests/sleep_test.cpp",
@@ -340,7 +340,7 @@
     {
       "path": "firmware/tests/unbonded_test.cpp",
       "source_sha256": "48579da6a5b5d892d916ddff72ea43c860ed72318ec190ccbf43f23dbed6227d",
-      "repository_sha256": "afa53f908e5b1bb1f09636bd59335c0672f790c4eb7c6084486cfb8264fda1d1"
+      "repository_sha256": "93c2d19406430e796bb1876ef9ae7b516edaf76e36c144ea5ea91fbcbb1fe8fe"
     },
     {
       "path": "scripts/enroll_display.py",
@@ -363,5 +363,13 @@
       "repository_sha256": "d6c44644967b55620f997dd12fc052fbb6604f45d89fcebc110298979bd19ba6"
     }
   ],
-  "refactor": "Inventory Counter naming; CW2/CW3/CWUSB, UUIDs, cwble2 storage and device IDs retained"
+  "refactor": "Inventory Counter naming; CW2/CW3/CWUSB, UUIDs, cwble2 storage and device IDs retained",
+  "imported_firmware_version": "3.7.0",
+  "power_update": "Interrupt-driven idle waits and one-second connectable advertising; BLE protocol, NVS records, bindings and label rendering preserved",
+  "added_files": [
+    {
+      "path": "firmware/tests/idle_power_test.cpp",
+      "repository_sha256": "5273ce329b733da4efbff6ade55e008205e5ab70b75038952477aa3ed1b450e2"
+    }
+  ]
 }

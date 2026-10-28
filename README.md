@@ -2,6 +2,8 @@
 
 BLE firmware for the Elecrow CrowPanel ESP32-S3 2.13-inch, 250 × 122 black-and-white e-paper display used by Inventory Counter. This repository starts with firmware **3.7.0** and can be consumed by an application repository as a pinned Git submodule.
 
+Current firmware **3.8.0** reduces idle wakeups and advertises once per second while remaining connectable. Buttons, incoming USB data, and Bluetooth activity wake the application as needed; QR and Find timers retain their deadlines. Discovery may take a few seconds. Transmit power stays at 0 dBm to retain the existing range.
+
 The label shows a product name, image, quantity, and QR code. Android clients send authenticated updates without Bluetooth bonding or a passcode. Menu shows or hides the QR, which also hides after two minutes. **Find tag** inverts the label for 30 seconds while preserving the QR area and its current visibility. Bluetooth remains available with modem sleep and automatic light sleep enabled.
 
 ## Layout
